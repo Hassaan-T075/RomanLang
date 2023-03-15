@@ -5,6 +5,7 @@
 class parser
 {
     lexer _lexer;
+    token l;
 public:
     void syntax_error();
     token expect(TokenType expected_type);
@@ -16,5 +17,23 @@ public:
         expect(TokenType::ASSIGN);   //example function call
       */
 	//all your parser function goes here
+    void start();
+    void _main();
+    void func();
+    void functype();
+    void params();
+    void sep();
+    void statements();
+    void blks();
+    void fblke();
+    void vartype();
+    void declare();
+    void declare_();
+    void input();
+    void output();
+    void loop();
+    void _if();
+    void ret();
+    void val();
 };
 #endif
