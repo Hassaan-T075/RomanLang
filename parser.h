@@ -6,6 +6,7 @@ class parser
 {
     lexer _lexer;
     token l;
+    int tabs = 0;
 public:
     void syntax_error();
     token expect(TokenType expected_type);
@@ -26,14 +27,27 @@ public:
     void statements();
     void blks();
     void fblke();
+    void blke();
     void vartype();
     void declare();
     void declare_();
+    //void val();
     void input();
+    void input_();
     void output();
+    void out_();
     void loop();
+    void exp();
+    void exp_();
+    void R();
+    void P();
+    void expval();
+    void rel();
     void _if();
+    void _elseif();
+    void _else();
     void ret();
-    void val();
+    void ret_();
+    void ptabs(string n);
 };
 #endif

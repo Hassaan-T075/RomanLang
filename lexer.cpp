@@ -516,7 +516,7 @@ void lexer::Tokenize() // function that tokenizes your input stream
             {
 
                 string temp = "";
-                for (str_itr; isalnum(*str_itr); str_itr++)
+                for (str_itr; isalnum(*str_itr) || *str_itr == '_'; str_itr++)
                 {
                     // if (isalpha(*str_itr))
                     //{
