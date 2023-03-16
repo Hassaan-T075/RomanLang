@@ -15,6 +15,7 @@
 // parser::parser(const char filename[])
 // {
 //     _lexer = lexer(filename);
+//     start();
 // }
 // void parser::readAndPrintAllInput() // read and print allinputs (provided)
 // {
@@ -52,8 +53,20 @@
 //     return false;
 // }*/
 
+// void parser::ptabs(string n)
+// {
+//     tabs++;
+//     for (size_t i = 0; i < tabs; i++)
+//     {
+//         cout << " ";
+//     }
+
+//     cout << n << "\n";
+// }
+
 // void parser::start()
 // {
+//     ptabs("start");
 //     if (_lexer.peek(1).tokenType == TokenType::COMMENT)
 //     {
 //         expect(TokenType::COMMENT);
@@ -74,10 +87,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::_main()
 // {
+//     ptabs("main");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_KAAM)
 //     {
 //         expect(TokenType::KEYWD_KAAM);
@@ -102,10 +117,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::func()
 // {
+//     ptabs("func");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_KAAM)
 //     {
 //         expect(TokenType::KEYWD_KAAM);
@@ -131,10 +148,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::blks()
 // {
+//     ptabs("blks");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_ST_BLK_KARO)
 //     {
 //         expect(TokenType::KEYWD_ST_BLK_KARO);
@@ -143,10 +162,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::fblke()
 // {
+//     ptabs("fblke");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_KAAM)
 //     {
 //         expect(TokenType::KEYWD_KAAM);
@@ -159,10 +180,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::blke()
 // {
+//     ptabs("blke");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_END_BLK_BAS_KARO)
 //     {
 //         expect(TokenType::KEYWD_END_BLK_BAS_KARO);
@@ -171,10 +194,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::functype()
 // {
+//     ptabs("functype");
 //     if (_lexer.peek(1).tokenType == TokenType::AT)
 //     {
 //         expect(TokenType::AT);
@@ -191,10 +216,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::params()
 // {
+//     ptabs("params");
 //     if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
 //     {
 //         expect(TokenType::IDENTIFIER);
@@ -205,10 +232,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::sep()
 // {
+//     ptabs("sep");
 //     if (_lexer.peek(1).tokenType == TokenType::PIPE)
 //     {
 //         expect(TokenType::PIPE);
@@ -217,10 +246,12 @@
 //     else
 //     {
 //     }
+//     tabs--;
 // }
 
 // void parser::statements()
 // {
+//     ptabs("statements");
 //     if (_lexer.peek(1).tokenType == TokenType::COMMENT)
 //     {
 //         expect(TokenType::COMMENT);
@@ -259,10 +290,12 @@
 //     else
 //     {
 //     }
+//     tabs--;
 // }
 
 // void parser::vartype()
 // {
+//     ptabs("vartype");
 //     if (_lexer.peek(1).tokenType == TokenType::AT)
 //     {
 //         expect(TokenType::AT);
@@ -275,10 +308,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::declare()
 // {
+//     ptabs("declare");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_RAKHO)
 //     {
 //         expect(TokenType::KEYWD_RAKHO);
@@ -293,10 +328,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::declare_()
 // {
+//     ptabs("declare_");
 //     if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
 //     {
 //         expect(TokenType::SEMICOLON);
@@ -312,11 +349,7 @@
 //                 expect(TokenType::SEMICOLON);
 //             }
 //         }
-//     }
-//     else if (_lexer.peek(1).tokenType == TokenType::ASSIGN)
-//     {
-//         expect(TokenType::ASSIGN);
-//         if (_lexer.peek(1).tokenType == TokenType::KEYWD_CHALAO)
+//         else if (_lexer.peek(1).tokenType == TokenType::KEYWD_CHALAO)
 //         {
 //             expect(TokenType::KEYWD_CHALAO);
 //             if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
@@ -337,65 +370,66 @@
 //                 }
 //             }
 //         }
-//     }
-//     else if (_lexer.peek(1).tokenType == TokenType::ASSIGN)
-//     {
-//         expect(TokenType::ASSIGN);
-//         exp();
-//         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+//         else
 //         {
-//             expect(TokenType::SEMICOLON);
-//         }
-//     }
-//     else
-//     {
-//         syntax_error();
-//     }
-// }
-
-// void parser::val()
-// {
-//     if (_lexer.peek(1).tokenType == TokenType::NUMERIC_LITERAL)
-//     {
-//         expect(TokenType::NUMERIC_LITERAL);
-//         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
-//         {
-//             expect(TokenType::SEMICOLON);
-//         }
-//     }
-//     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_CHALAO)
-//     {
-//         expect(TokenType::KEYWD_CHALAO);
-//         if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
-//         {
-//             expect(TokenType::IDENTIFIER);
-//             if (_lexer.peek(1).tokenType == TokenType::OPEN_PARENTHESIS)
+//             exp();
+//             if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
 //             {
-//                 expect(TokenType::OPEN_PARENTHESIS);
-//                 params();
-//                 if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
-//                 {
-//                     expect(TokenType::CLOSE_PARENTHESIS);
-//                     if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
-//                     {
-//                         expect(TokenType::SEMICOLON);
-//                     }
-//                 }
+//                 expect(TokenType::SEMICOLON);
 //             }
 //         }
 //     }
-//     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_ADAD)
-//     {
-//         // do something
-//     }
 //     else
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
+
+// // void parser::val()
+// // {
+// //     if (_lexer.peek(1).tokenType == TokenType::NUMERIC_LITERAL)
+// //     {
+// //         expect(TokenType::NUMERIC_LITERAL);
+// //         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+// //         {
+// //             expect(TokenType::SEMICOLON);
+// //         }
+// //     }
+// //     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_CHALAO)
+// //     {
+// //         expect(TokenType::KEYWD_CHALAO);
+// //         if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
+// //         {
+// //             expect(TokenType::IDENTIFIER);
+// //             if (_lexer.peek(1).tokenType == TokenType::OPEN_PARENTHESIS)
+// //             {
+// //                 expect(TokenType::OPEN_PARENTHESIS);
+// //                 params();
+// //                 if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
+// //                 {
+// //                     expect(TokenType::CLOSE_PARENTHESIS);
+// //                     if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+// //                     {
+// //                         expect(TokenType::SEMICOLON);
+// //                     }
+// //                 }
+// //             }
+// //         }
+// //     }
+// //     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_ADAD)
+// //     {
+// //         // do something
+// //     }
+// //     else
+// //     {
+// //         syntax_error();
+// //     }
+// // }
 
 // void parser::input()
 // {
+//     ptabs("input");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_LO)
 //     {
 //         expect(TokenType::KEYWD_LO);
@@ -405,10 +439,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::input_()
 // {
+//     ptabs("input_");
 //     if (_lexer.peek(1).tokenType == TokenType::INPUT)
 //     {
 //         expect(TokenType::INPUT);
@@ -445,10 +481,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::output()
 // {
+//     ptabs("output");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_DEKHAO)
 //     {
 //         expect(TokenType::KEYWD_DEKHAO);
@@ -462,10 +500,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::out_()
 // {
+//     ptabs("out_");
 //     if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
 //     {
 //         expect(TokenType::IDENTIFIER);
@@ -478,10 +518,12 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::loop()
 // {
+//     ptabs("loop");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_JAB)
 //     {
 //         expect(TokenType::KEYWD_JAB);
@@ -506,24 +548,101 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::exp()
 // {
+//     ptabs("exp");
+//     exp_();
+//     R();
+//     tabs--;
 // }
 
 // void parser::exp_()
 // {
+//     ptabs("exp_");
+//     expval();
+//     P();
+//     tabs--;
+// }
+
+// void parser::R()
+// {
+//     ptabs("R");
+//     if (_lexer.peek(1).tokenType == TokenType::PLUS)
+//     {
+//         expect(TokenType::PLUS);
+//         exp_();
+//         rel();
+//         R();
+//     }
+//     else if (_lexer.peek(1).tokenType == TokenType::MINUS)
+//     {
+//         expect(TokenType::MINUS);
+//         exp_();
+//         rel();
+//         R();
+//     }
+//     else
+//     {
+//     }
+//     tabs--;
+// }
+
+// void parser::P()
+// {
+//     ptabs("P");
+//     if (_lexer.peek(1).tokenType == TokenType::MODULUS)
+//     {
+//         expect(TokenType::MODULUS);
+//         expval();
+//         rel();
+//         P();
+//     }
+//     else if (_lexer.peek(1).tokenType == TokenType::MULTIPLY)
+//     {
+//         expect(TokenType::MULTIPLY);
+//         expval();
+//         rel();
+//         P();
+//     }
+//     else if (_lexer.peek(1).tokenType == TokenType::DIVIDE)
+//     {
+//         expect(TokenType::DIVIDE);
+//         expval();
+//         rel();
+//         P();
+//     }
+//     else
+//     {
+//     }
+//     tabs--;
 // }
 
 // void parser::expval()
 // {
+//     ptabs("expval");
+//     if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
+//     {
+//         expect(TokenType::IDENTIFIER);
+//     }
+//     else if (_lexer.peek(1).tokenType == TokenType::NUMERIC_LITERAL)
+//     {
+//         expect(TokenType::NUMERIC_LITERAL);
+//     }
+//     else
+//     {
+//         syntax_error();
+//     }
+//     tabs--;
 // }
 
 // void parser::rel()
 // {
 //     // <= exp | < exp | >= exp | > exp | <> exp | = exp | null
 
+//     ptabs("rel");
 //     if (_lexer.peek(1).tokenType == TokenType::GREATER_THAN_EQUAL_TO)
 //     {
 //         expect(TokenType::GREATER_THAN_EQUAL_TO);
@@ -557,12 +676,14 @@
 //     else
 //     {
 //     }
+//     tabs--;
 // }
 
 // void parser::_if()
 // {
 //     // agar (exp) to phir blks statements elseif else blke
 
+//     ptabs("_if");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_AGAR)
 //     {
 //         expect(TokenType::KEYWD_AGAR);
@@ -570,7 +691,7 @@
 //         {
 //             expect(TokenType::OPEN_PARENTHESIS);
 //             exp();
-//             if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
+//             if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)/////
 //             {
 //                 expect(TokenType::CLOSE_PARENTHESIS);
 //                 if (_lexer.peek(1).tokenType == TokenType::KEYWD_TO)
@@ -593,11 +714,14 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::_elseif()
 // {
 //     // warna agar (exp) to phir statements else | null
+    
+//     ptabs("_elseif");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_WARNA)
 //     {
 //         expect(TokenType::KEYWD_WARNA);
@@ -628,11 +752,14 @@
 //     else
 //     {
 //     }
+//     tabs--;
 // }
 
 // void parser::_else()
 // {
 //     // warna phir statements | null
+ 
+//     ptabs("_else");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_WARNA)
 //     {
 //         expect(TokenType::KEYWD_WARNA);
@@ -645,11 +772,14 @@
 //     else
 //     {
 //     }
+//     tabs--;
 // }
 
 // void parser::ret()
 // {
 //     // wapis bhejo returnstatement_;
+    
+//     ptabs("ret");
 //     if (_lexer.peek(1).tokenType == TokenType::KEYWD_WAPAS)
 //     {
 //         expect(TokenType::KEYWD_WAPAS);
@@ -663,11 +793,14 @@
 //     {
 //         syntax_error();
 //     }
+//     tabs--;
 // }
 
 // void parser::ret_()
 // {
 //     // num; | null
+
+//     ptabs("ret_");
 //     if (_lexer.peek(1).tokenType == TokenType::NUMERIC_LITERAL)
 //     {
 //         expect(TokenType::NUMERIC_LITERAL);
@@ -679,4 +812,5 @@
 //     else
 //     {
 //     }
+//     tabs--;
 // }

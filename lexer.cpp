@@ -524,7 +524,7 @@ void lexer::Tokenize() // function that tokenizes your input stream
                     //}
                 }
                 tokens.push_back(token(string(temp), TokenType::IDENTIFIER));
-                *str_itr--;
+                str_itr--; //*str_itr--;
                 break;
             }
             // Numeric literals
