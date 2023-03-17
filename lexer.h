@@ -57,6 +57,7 @@ enum class TokenType
 	KEYWD_KHATAM,
 	STRING,
 	CHARACTER,
+	NEWLINE,
 	ERROR
 
 };

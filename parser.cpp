@@ -2,7 +2,7 @@
 
 void parser::syntax_error()
 {
-    cout << "SYNTAX ERROR\n";
+    cout << "SYNTAX ERROR at line: " << no_of_lines << "\n";
     exit(1);
 }
 token parser::expect(TokenType expected_type)
@@ -72,7 +72,11 @@ void parser::start()
         ptabs(";");
         tabs--;
         expect(TokenType::SEMICOLON);
-        if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+        if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+        {
+            newline();
+        }
+        else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
         {
             ptabs("cmt");
             tabs--;
@@ -99,6 +103,11 @@ void parser::start()
             func();
             start();
         }
+    }
+    else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+    {
+        newline();
+        start();
     }
     else
     {
@@ -194,6 +203,27 @@ void parser::blks()
         ptabs("karo");
         tabs--;
         expect(TokenType::KEYWD_ST_BLK_KARO);
+        if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+        {
+            ptabs(";");
+            tabs--;
+            expect(TokenType::SEMICOLON);
+            if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+            {
+                ptabs("cmt");
+                tabs--;
+                expect(TokenType::COMMENT);
+                newline();
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
+        }
+        else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+        {
+            newline();
+        }
     }
     else
     {
@@ -213,6 +243,27 @@ void parser::fblke()
         if (_lexer.peek(1).tokenType == TokenType::KEYWD_KHATAM)
         {
             expect(TokenType::KEYWD_KHATAM);
+            if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+            {
+                ptabs(";");
+                tabs--;
+                expect(TokenType::SEMICOLON);
+                if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+                {
+                    ptabs("cmt");
+                    tabs--;
+                    expect(TokenType::COMMENT);
+                    newline();
+                }
+                else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+                {
+                    newline();
+                }
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
         }
     }
     else
@@ -233,6 +284,7 @@ void parser::blke()
         if (_lexer.peek(1).tokenType == TokenType::KEYWD_ST_BLK_KARO)
         {
             expect(TokenType::KEYWD_ST_BLK_KARO);
+            newline();
         }
     }
     else
@@ -345,7 +397,11 @@ void parser::statements()
         ptabs(";");
         tabs--;
         expect(TokenType::SEMICOLON);
-        if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+        if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+        {
+            newline();
+        }
+        else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
         {
             ptabs("cmt");
             tabs--;
@@ -400,6 +456,11 @@ void parser::statements()
         // ptabs("wapis");
         // tabs--;
         ret();
+        statements();
+    }
+    else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+    {
+        newline();
         statements();
     }
     else
@@ -468,11 +529,19 @@ void parser::declare_()
             ptabs(";");
             tabs--;
             expect(TokenType::SEMICOLON);
-            if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+            if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
             {
                 ptabs("cmt");
                 tabs--;
                 expect(TokenType::COMMENT);
+                if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+                {
+                    newline();
+                }
             }
         }
     }
@@ -491,11 +560,19 @@ void parser::declare__()
         ptabs(";");
         tabs--;
         expect(TokenType::SEMICOLON);
-        if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+        if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+        {
+            newline();
+        }
+        else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
         {
             ptabs("cmt");
             tabs--;
             expect(TokenType::COMMENT);
+            if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
         }
     }
     else if (_lexer.peek(1).tokenType == TokenType::ASSIGN)
@@ -509,11 +586,16 @@ void parser::declare__()
             ptabs(";");
             tabs--;
             expect(TokenType::SEMICOLON);
-            if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+            if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
             {
                 ptabs("cmt");
                 tabs--;
                 expect(TokenType::COMMENT);
+                newline();
             }
         }
     }
@@ -599,6 +681,17 @@ void parser::input_()
                 ptabs(";");
                 tabs--;
                 expect(TokenType::SEMICOLON);
+                if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+                {
+                    newline();
+                }
+                else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+                {
+                    ptabs("cmt");
+                    tabs--;
+                    expect(TokenType::COMMENT);
+                    newline();
+                }
             }
         }
     }
@@ -627,6 +720,17 @@ void parser::input_()
                         ptabs(";");
                         tabs--;
                         expect(TokenType::SEMICOLON);
+                        if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+                        {
+                            newline();
+                        }
+                        else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+                        {
+                            ptabs("cmt");
+                            tabs--;
+                            expect(TokenType::COMMENT);
+                            newline();
+                        }
                     }
                 }
             }
@@ -653,11 +757,16 @@ void parser::output()
             ptabs(";");
             tabs--;
             expect(TokenType::SEMICOLON);
-            if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+            if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
             {
                 ptabs("cmt");
                 tabs--;
                 expect(TokenType::COMMENT);
+                newline();
             }
         }
     }
@@ -991,6 +1100,27 @@ void parser::_elseif()
                             ptabs("phir");
                             tabs--;
                             expect(TokenType::KEYWD_PHIR);
+                            if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+                            {
+                                ptabs(";");
+                                tabs--;
+                                expect(TokenType::SEMICOLON);
+                                if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+                                {
+                                    ptabs("cmt");
+                                    tabs--;
+                                    expect(TokenType::COMMENT);
+                                    newline();
+                                }
+                                else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+                                {
+                                    newline();
+                                }
+                            }
+                            else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+                            {
+                                newline();
+                            }
                             statements();
                             _else();
                         }
@@ -1020,6 +1150,27 @@ void parser::_else()
             ptabs("phir");
             tabs--;
             expect(TokenType::KEYWD_PHIR);
+            if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+            {
+                ptabs(";");
+                tabs--;
+                expect(TokenType::SEMICOLON);
+                if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+                {
+                    ptabs("cmt");
+                    tabs--;
+                    expect(TokenType::COMMENT);
+                    newline();
+                }
+                else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+                {
+                    newline();
+                }
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
             statements();
         }
     }
@@ -1069,10 +1220,35 @@ void parser::ret_()
             ptabs(";");
             tabs--;
             expect(TokenType::SEMICOLON);
+            if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+            {
+                ptabs("cmt");
+                tabs--;
+                expect(TokenType::COMMENT);
+                newline();
+            }
         }
     }
     else
     {
     }
     tabs--;
+}
+
+void parser::newline()
+{
+    if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+    {
+
+        expect(TokenType::NEWLINE);
+        no_of_lines++;
+    }
+    else
+    {
+        syntax_error();
+    }
 }

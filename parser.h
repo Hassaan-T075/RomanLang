@@ -49,6 +49,7 @@ public:
     token l;
     int tabs = 0;
     symboltable smt;
+    int no_of_lines = 1;
 
 public:
     void syntax_error();
@@ -96,5 +97,6 @@ public:
     void ret();
     void ret_();
     void ptabs(string n);
+    void newline();
 };
 #endif

@@ -49,6 +49,7 @@ string reserved[] = {
     "KEYWD_KHATAM",
     "STRING",
     "CHARACTER",
+    "NEWLINE",
     "ERROR"};
 token::token()
 {
@@ -88,7 +89,12 @@ void lexer::Tokenize() // function that tokenizes your input stream
 
         switch (state)
         {
-
+        // case 0:
+        //     if (*str_itr == '\n')
+        //     {
+        //         tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+        //         break;
+        //     }
         // Keywords
 
         // markazi
@@ -98,7 +104,13 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 7) == ' ' || *(str_itr + 7) == '\n' || !isalnum(*(str_itr + 7)))
                 {
                     tokens.push_back(token(string("markazi"), TokenType::KEYWD_MARKAZI));
+                    if (*(str_itr + 7) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 6;
+
                     break;
                 }
             }
@@ -109,6 +121,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 4) == ' ' || *(str_itr + 4) == '\n' || !isalnum(*(str_itr + 4)))
                 {
                     tokens.push_back(token(string("kaam"), TokenType::KEYWD_KAAM));
+                    if (*(str_itr + 4) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 3;
                     break;
                 }
@@ -120,6 +137,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 4) == ' ' || *(str_itr + 4) == '\n' || !isalnum(*(str_itr + 4)))
                 {
                     tokens.push_back(token(string("karo"), TokenType::KEYWD_ST_BLK_KARO));
+                    if (*(str_itr + 4) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 3;
                     break;
                 }
@@ -131,6 +153,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 5) == ' ' || *(str_itr + 5) == '\n' || !isalnum(*(str_itr + 5)))
                 {
                     tokens.push_back(token(string("rakho"), TokenType::KEYWD_RAKHO));
+                    if (*(str_itr + 5) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 4;
                     break;
                 }
@@ -142,6 +169,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 3) == ' ' || *(str_itr + 3) == '\n' || !isalnum(*(str_itr + 3)))
                 {
                     tokens.push_back(token(string("jab"), TokenType::KEYWD_JAB));
+                    if (*(str_itr + 3) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 2;
                     break;
                 }
@@ -153,6 +185,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 3) == ' ' || *(str_itr + 3) == '\n' || !isalnum(*(str_itr + 3)))
                 {
                     tokens.push_back(token(string("tak"), TokenType::KEYWD_TAK));
+                    if (*(str_itr + 3) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 2;
                     break;
                 }
@@ -164,6 +201,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 3) == ' ' || *(str_itr + 3) == '\n' || !isalnum(*(str_itr + 3)))
                 {
                     tokens.push_back(token(string("bas"), TokenType::KEYWD_BAS));
+                    if (*(str_itr + 3) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 2;
                     break;
                 }
@@ -175,6 +217,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 4) == ' ' || *(str_itr + 4) == '\n' || !isalnum(*(str_itr + 4)))
                 {
                     tokens.push_back(token(string("agar"), TokenType::KEYWD_AGAR));
+                    if (*(str_itr + 4) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 3;
                     break;
                 }
@@ -186,6 +233,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 2) == ' ' || *(str_itr + 2) == '\n' || !isalnum(*(str_itr + 2)))
                 {
                     tokens.push_back(token(string("to"), TokenType::KEYWD_TO));
+                    if (*(str_itr + 2) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 1;
                     break;
                 }
@@ -197,6 +249,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 5) == ' ' || *(str_itr + 5) == '\n' || !isalnum(*(str_itr + 5)))
                 {
                     tokens.push_back(token(string("warna"), TokenType::KEYWD_WARNA));
+                    if (*(str_itr + 5) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 4;
                     break;
                 }
@@ -208,6 +265,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 4) == ' ' || *(str_itr + 4) == '\n' || !isalnum(*(str_itr + 4)))
                 {
                     tokens.push_back(token(string("phir"), TokenType::KEYWD_PHIR));
+                    if (*(str_itr + 4) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 3;
                     break;
                 }
@@ -219,6 +281,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 6) == ' ' || *(str_itr + 6) == '\n' || !isalnum(*(str_itr + 6)))
                 {
                     tokens.push_back(token(string("dekhao"), TokenType::KEYWD_DEKHAO));
+                    if (*(str_itr + 6) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 5;
                     break;
                 }
@@ -230,6 +297,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 2) == ' ' || *(str_itr + 2) == '\n' || !isalnum(*(str_itr + 2)))
                 {
                     tokens.push_back(token(string("lo"), TokenType::KEYWD_LO));
+                    if (*(str_itr + 2) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 1;
                     break;
                 }
@@ -241,6 +313,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 6) == ' ' || *(str_itr + 6) == '\n' || !isalnum(*(str_itr + 6)))
                 {
                     tokens.push_back(token(string("chalao"), TokenType::KEYWD_CHALAO));
+                    if (*(str_itr + 6) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 5;
                     break;
                 }
@@ -252,6 +329,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 5) == ' ' || *(str_itr + 5) == '\n' || !isalnum(*(str_itr + 5)))
                 {
                     tokens.push_back(token(string("wapas"), TokenType::KEYWD_WAPAS));
+                    if (*(str_itr + 5) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 4;
                     break;
                 }
@@ -263,6 +345,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 6) == ' ' || *(str_itr + 6) == '\n' || !isalnum(*(str_itr + 6)))
                 {
                     tokens.push_back(token(string("bhaijo"), TokenType::KEYWD_BHAIJO));
+                    if (*(str_itr + 6) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 5;
                     break;
                 }
@@ -274,6 +361,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 4) == ' ' || *(str_itr + 4) == '\n' || !isalnum(*(str_itr + 4)))
                 {
                     tokens.push_back(token(string("adad"), TokenType::KEYWD_ADAD));
+                    if (*(str_itr + 4) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 3;
                     break;
                 }
@@ -285,6 +377,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 5) == ' ' || *(str_itr + 5) == '\n' || !isalnum(*(str_itr + 5)))
                 {
                     tokens.push_back(token(string("khali"), TokenType::KEYWD_KHALI));
+                    if (*(str_itr + 5) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 4;
                     break;
                 }
@@ -296,6 +393,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 6) == ' ' || *(str_itr + 6) == '\n' || !isalnum(*(str_itr + 6)))
                 {
                     tokens.push_back(token(string("khatam"), TokenType::KEYWD_KHATAM));
+                    if (*(str_itr + 6) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 5;
                     break;
                 }
@@ -307,6 +409,11 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 if (*(str_itr + 8) == ' ' || *(str_itr + 8) == '\n' || !isalnum(*(str_itr + 8)))
                 {
                     tokens.push_back(token(string("bas karo"), TokenType::KEYWD_END_BLK_BAS_KARO));
+                    if (*(str_itr + 8) == '\n')
+                    {
+                        tokens.push_back(token(string("newline"), TokenType::NEWLINE));
+                        str_itr = str_itr + 1;
+                    }
                     str_itr = str_itr + 7;
                     break;
                 }
@@ -327,6 +434,7 @@ void lexer::Tokenize() // function that tokenizes your input stream
                         temp = temp + *str_itr;
                     }
                     tokens.push_back(token(string(temp), TokenType::COMMENT));
+                    tokens.push_back(token(string("newline"), TokenType::NEWLINE));
                     break;
                 }
             }
@@ -529,6 +637,7 @@ void lexer::Tokenize() // function that tokenizes your input stream
             }
             // Numeric literals
         case 47:
+
             if (isdigit((int)*str_itr))
             {
 
@@ -542,6 +651,13 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 }
                 tokens.push_back(token(string(temp), TokenType::NUMERIC_LITERAL));
                 str_itr--;
+                break;
+            }
+
+        case 48:
+            if (*str_itr == '\n')
+            {
+                tokens.push_back(token(string("newline"), TokenType::NEWLINE));
                 break;
             }
         }
