@@ -89,12 +89,6 @@ void lexer::Tokenize() // function that tokenizes your input stream
 
         switch (state)
         {
-        // case 0:
-        //     if (*str_itr == '\n')
-        //     {
-        //         tokens.push_back(token(string("newline"), TokenType::NEWLINE));
-        //         break;
-        //     }
         // Keywords
 
         // markazi
@@ -653,7 +647,7 @@ void lexer::Tokenize() // function that tokenizes your input stream
                 str_itr--;
                 break;
             }
-
+        //keep track of lines
         case 48:
             if (*str_itr == '\n')
             {

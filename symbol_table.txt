@@ -1,0 +1,10 @@
+     ---SYMBOL TABLE---
+
+name: calculateFib    type: adad
+name: x    type: adad
+name: y    type: adad
+name: z    type: adad
+name: i    type: adad
+name: markazi    type: khali
+name: num    type: adad
+name: result    type: adad

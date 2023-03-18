@@ -2,4 +2,99 @@ This will be your grammar file in future assignments
 Leave it as it is for now
 GRAMMAR:
 
+start -> comment start | func start | main
+
+main -> kaam markazi functype () blks 
+	  statements 
+	  flke
+
+func -> kaam id functype (params) blks
+	  statements
+	  fblke
+
+functype -> @adad | @khali
+
+statements -> comment statements | declare statements | input statements | output statements | loop statements | if statements | 
+		  return statements | null
+
+params -> id vartype sep
+
+sep -> |params | null (first '|' stands for pipe sign to separate parameters, second '|' stands for or for cfg productions) 
+
+comment -> ; cmt
+
+declare -> rakho id declare_
+
+declare_ -> vartype declare__ | := val ;
+
+declare__ -> ; | := val ;
+
+val -> num | chalao id (args) | exp
+
+args -> id args_
+
+args_ -> |args | null (first '|' stands for pipe sign to separate arguments, second '|' stands for or for cfg productions)
+
+vartype -> @adad
+
+input -> lo input_
+
+input_ -> >> id ; | << str >> id ;
+
+output -> dekhao output_ ;
+
+output_ -> << out_ output_ | null
+
+out_ -> id | str | chr
+
+loop -> jab tak (exp) blks
+	  statements
+	  blke
+
+exp -> exp_ R
+
+exp_ -> expval P
+
+R -> + exp_ rel R | - exp_ rel R | null
+
+P -> % expval rel P | * expval rel P | / expval rel P | null
+
+expval -> id | num
+
+rel -> <= exp | < exp | >= exp | > exp | <> exp | = exp | null
+
+_if -> agar (exp) to phir blks
+	 statements
+	 _elseif
+	 _else
+	 blke
+
+_elseif -> warna agar (exp) to phir
+	     statements
+	     _else | null
+
+_else -> warna phir 
+	   statements | null
+
+blks -> karo
+
+blke -> bas karo
+
+fblke -> kaam khatam
+
+ret -> wapas bhaijo ret_
+
+ret_ -> num ; | null
+
+
 Regular Expressions used in GRAMMAR
+
+id -> (letter)(letter|digit)*
+num -> (digit)*
+str -> `(digit+letter)*`
+chr -> `(digit+letter)`
+cmt -> ;( ` + ro + io + letter + digit)
+ro -> <=|<|>=|>|=|<>
+io -> >>|<<
+letter -> _|A|B|...|Z|a|b|...|z
+digit -> 0|1|...|9

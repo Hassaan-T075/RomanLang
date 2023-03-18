@@ -284,7 +284,27 @@ void parser::blke()
         if (_lexer.peek(1).tokenType == TokenType::KEYWD_ST_BLK_KARO)
         {
             expect(TokenType::KEYWD_ST_BLK_KARO);
-            newline();
+            if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
+            {
+                ptabs(";");
+                tabs--;
+                expect(TokenType::SEMICOLON);
+                if (_lexer.peek(1).tokenType == TokenType::COMMENT)
+                {
+                    ptabs("cmt");
+                    tabs--;
+                    expect(TokenType::COMMENT);
+                    newline();
+                }
+                else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+                {
+                    newline();
+                }
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::NEWLINE)
+            {
+                newline();
+            }
         }
     }
     else
@@ -418,43 +438,31 @@ void parser::statements()
     }
     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_RAKHO)
     {
-        // ptabs("rakho");
-        // tabs--;
         declare();
         statements();
     }
     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_LO)
     {
-        // ptabs("lo");
-        // tabs--;
         input();
         statements();
     }
     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_DEKHAO)
     {
-        // ptabs("dekhao");
-        // tabs--;
         output();
         statements();
     }
     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_JAB)
     {
-        // ptabs("jab");
-        // tabs--;
         loop();
         statements();
     }
     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_AGAR)
     {
-        // ptabs("agar");
-        // tabs--;
         _if();
         statements();
     }
     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_WAPAS)
     {
-        // ptabs("wapis");
-        // tabs--;
         ret();
         statements();
     }
@@ -544,11 +552,19 @@ void parser::declare_()
                 }
             }
         }
+        else
+        {
+            syntax_error();
+        }
     }
-    else
+    else if (_lexer.peek(1).tokenType == TokenType::AT)
     {
         vartype();
         declare__();
+    }
+    else
+    {
+        syntax_error();
     }
     tabs--;
 }
@@ -597,6 +613,10 @@ void parser::declare__()
                 expect(TokenType::COMMENT);
                 newline();
             }
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -693,6 +713,10 @@ void parser::input_()
                     newline();
                 }
             }
+            else
+            {
+                syntax_error();
+            }
         }
     }
     else if (_lexer.peek(1).tokenType == TokenType::OUTPUT)
@@ -732,6 +756,10 @@ void parser::input_()
                             newline();
                         }
                     }
+                    else
+                    {
+                        syntax_error();
+                    }
                 }
             }
         }
@@ -768,6 +796,10 @@ void parser::output()
                 expect(TokenType::COMMENT);
                 newline();
             }
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -850,7 +882,19 @@ void parser::loop()
                     statements();
                     blke();
                 }
+                else
+                {
+                    syntax_error();
+                }
             }
+            else
+            {
+                syntax_error();
+            }
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -864,7 +908,6 @@ void parser::exp()
 {
     ptabs("exp");
     exp_();
-    rel();
     R();
     tabs--;
 }
@@ -956,6 +999,23 @@ void parser::expval()
         tabs--;
         expect(TokenType::NUMERIC_LITERAL);
     }
+    else if (_lexer.peek(1).tokenType == TokenType::OPEN_PARENTHESIS)
+    {
+        ptabs("(");
+        tabs--;
+        expect(TokenType::OPEN_PARENTHESIS);
+        exp();
+        if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
+        {
+            ptabs(")");
+            tabs--;
+            expect(TokenType::CLOSE_PARENTHESIS);
+        }
+        else
+        {
+            syntax_error();
+        }
+    }
     else
     {
         syntax_error();
@@ -965,8 +1025,6 @@ void parser::expval()
 
 void parser::rel()
 {
-    // <= exp | < exp | >= exp | > exp | <> exp | = exp | null
-
     ptabs("rel");
     if (_lexer.peek(1).tokenType == TokenType::GREATER_THAN_EQUAL_TO)
     {
@@ -1018,8 +1076,6 @@ void parser::rel()
 
 void parser::_if()
 {
-    // agar (exp) to phir blks statements elseif else blke
-
     ptabs("_if");
     if (_lexer.peek(1).tokenType == TokenType::KEYWD_AGAR)
     {
@@ -1066,8 +1122,6 @@ void parser::_if()
 
 void parser::_elseif()
 {
-    // warna agar (exp) to phir statements else | null
-
     ptabs("_elseif");
     if (_lexer.peek(1).tokenType == TokenType::KEYWD_WARNA)
     {
@@ -1137,8 +1191,6 @@ void parser::_elseif()
 
 void parser::_else()
 {
-    // warna phir statements | null
-
     ptabs("_else");
     if (_lexer.peek(1).tokenType == TokenType::KEYWD_WARNA)
     {
@@ -1182,8 +1234,6 @@ void parser::_else()
 
 void parser::ret()
 {
-    // wapis bhejo returnstatement_;
-
     ptabs("ret");
     if (_lexer.peek(1).tokenType == TokenType::KEYWD_WAPAS)
     {
@@ -1207,8 +1257,6 @@ void parser::ret()
 
 void parser::ret_()
 {
-    // num; | null
-
     ptabs("ret_");
     if (_lexer.peek(1).tokenType == TokenType::NUMERIC_LITERAL)
     {
@@ -1231,6 +1279,10 @@ void parser::ret_()
                 expect(TokenType::COMMENT);
                 newline();
             }
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
