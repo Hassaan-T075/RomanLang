@@ -143,6 +143,7 @@ public:
     void input_();
     void output();
     void output_();
+    void output__();
     void out_();
     void loop();
     void exp();

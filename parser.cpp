@@ -142,10 +142,22 @@ void parser::_main()
                     tabs--;
                     expect(TokenType::CLOSE_PARENTHESIS);
                 }
+                else
+                {
+                    syntax_error();
+                }
+            }
+            else
+            {
+                syntax_error();
             }
             blks();
             statements();
             fblke();
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -182,10 +194,22 @@ void parser::func()
                     tabs--;
                     expect(TokenType::CLOSE_PARENTHESIS);
                 }
+                else
+                {
+                    syntax_error();
+                }
+            }
+            else
+            {
+                syntax_error();
             }
             blks();
             statements();
             fblke();
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -265,6 +289,10 @@ void parser::fblke()
                 newline();
             }
         }
+        else
+        {
+            syntax_error();
+        }
     }
     else
     {
@@ -306,6 +334,10 @@ void parser::blke()
                 newline();
             }
         }
+        else
+        {
+            syntax_error();
+        }
     }
     else
     {
@@ -333,6 +365,10 @@ void parser::functype()
             ptabs("khali");
             tabs--;
             expect(TokenType::KEYWD_KHALI);
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -429,13 +465,6 @@ void parser::statements()
             statements();
         }
     }
-    else if (_lexer.peek(1).tokenType == TokenType::COMMENT)
-    {
-        ptabs("cmt");
-        tabs--;
-        expect(TokenType::COMMENT);
-        statements();
-    }
     else if (_lexer.peek(1).tokenType == TokenType::KEYWD_RAKHO)
     {
         declare();
@@ -491,6 +520,10 @@ void parser::vartype()
             tabs--;
             expect(TokenType::KEYWD_ADAD);
         }
+        else
+        {
+            syntax_error();
+        }
     }
     else
     {
@@ -514,6 +547,10 @@ void parser::declare()
             smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme);
             expect(TokenType::IDENTIFIER);
             declare_();
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -656,7 +693,19 @@ void parser::val()
                     tabs--;
                     expect(TokenType::CLOSE_PARENTHESIS);
                 }
+                else
+                {
+                    syntax_error();
+                }
             }
+            else
+            {
+                syntax_error();
+            }
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -718,6 +767,10 @@ void parser::input_()
                 syntax_error();
             }
         }
+        else
+        {
+            syntax_error();
+        }
     }
     else if (_lexer.peek(1).tokenType == TokenType::OUTPUT)
     {
@@ -761,7 +814,19 @@ void parser::input_()
                         syntax_error();
                     }
                 }
+                else
+                {
+                    syntax_error();
+                }
             }
+            else
+            {
+                syntax_error();
+            }
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -818,6 +883,20 @@ void parser::output_()
         tabs--;
         expect(TokenType::OUTPUT);
         out_();
+        output__();
+    }
+    else
+    {
+        syntax_error();
+    }
+    tabs--;
+}
+
+void ::parser::output__()
+{
+    ptabs("output__");
+    if (_lexer.peek(1).tokenType == TokenType::OUTPUT)
+    {
         output_();
     }
     else
@@ -1088,7 +1167,7 @@ void parser::_if()
             tabs--;
             expect(TokenType::OPEN_PARENTHESIS);
             exp();
-            if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS) /////
+            if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
             {
                 ptabs(")");
                 tabs--;
@@ -1109,8 +1188,24 @@ void parser::_if()
                         _else();
                         blke();
                     }
+                    else
+                    {
+                        syntax_error();
+                    }
+                }
+                else
+                {
+                    syntax_error();
                 }
             }
+            else
+            {
+                syntax_error();
+            }
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -1178,9 +1273,29 @@ void parser::_elseif()
                             statements();
                             _else();
                         }
+                        else
+                        {
+                            syntax_error();
+                        }
+                    }
+                    else
+                    {
+                        syntax_error();
                     }
                 }
+                else
+                {
+                    syntax_error();
+                }
             }
+            else
+            {
+                syntax_error();
+            }
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
@@ -1225,6 +1340,10 @@ void parser::_else()
             }
             statements();
         }
+        else
+        {
+            syntax_error();
+        }
     }
     else
     {
@@ -1246,6 +1365,10 @@ void parser::ret()
             tabs--;
             expect(TokenType::KEYWD_BHAIJO);
             ret_();
+        }
+        else
+        {
+            syntax_error();
         }
     }
     else
