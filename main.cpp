@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
 		cout << "---Parse Tree---\n\n";
 		parser p(argv[1]);
 		p.smt.print_table();
+		//cout << p.nl;
+		//p.find_replace("goto");
 	}
 	else if (argc > 2)
 	{ // argument limit exceeds

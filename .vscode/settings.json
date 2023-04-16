@@ -1,6 +1,6 @@
 {
     "files.associations": {
-        "algorithm": "cpp",
-        "*.tcc": "cpp"
+        "string": "cpp",
+        "iosfwd": "cpp"
     }
 }
