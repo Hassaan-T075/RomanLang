@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+
 using namespace std;
 
 class symboltable
@@ -8,6 +9,7 @@ public:
     string **table;
     int index = 0;
     int max_size = 2;
+    int addr_counter = 0;
 
     symboltable()
     {
@@ -16,17 +18,20 @@ public:
 
         for (int i = 0; i < max_size; i++)
         {
-            table[i] = new string[2];
+            table[i] = new string[5];
         }
 
         for (int i = 0; i < max_size; i++)
         {
             table[i][0] = " ";
             table[i][1] = " ";
+            table[i][2] = " ";
+            table[i][3] = " ";
+            table[i][4] = " ";
         }
     }
 
-    void insert_item(string name, string type)
+    void insert_item(string name, string type, int line = -1, string initialValue = "0", bool isFunc = 0)
     {
         for (int i = 0; i < index; i++)
         {
@@ -37,6 +42,21 @@ public:
         {
             table[index][0] = name;
             table[index][1] = type;
+            if (line == -1) // store memory addr
+            {
+                table[index][2] = to_string(addr_counter);
+                if (type == "adad")
+                {
+                    addr_counter += 4;
+                }
+            }
+            else
+            { // store line
+
+                table[index][2] = to_string(line);
+            }
+            table[index][3] = initialValue;
+            table[index][4] = to_string(isFunc);
             index++;
         }
         else
@@ -47,18 +67,24 @@ public:
             for (int i = 0; i < new_size; i++)
             {
 
-                new_table[i] = new string[2];
+                new_table[i] = new string[5];
             }
 
             for (int i = 0; i < new_size; i++)
             {
                 new_table[i][0] = " ";
                 new_table[i][1] = " ";
+                new_table[i][2] = " ";
+                new_table[i][3] = " ";
+                new_table[i][4] = " ";
             }
             for (int i = 0; i < max_size; i++)
             {
                 new_table[i][0] = table[i][0];
                 new_table[i][1] = table[i][1];
+                new_table[i][2] = table[i][2];
+                new_table[i][3] = table[i][3];
+                new_table[i][4] = table[i][4];
             }
 
             for (int i = 0; i < max_size; i++)
@@ -71,6 +97,21 @@ public:
 
             table[index][0] = name;
             table[index][1] = type;
+            if (line == -1) // store memory addr
+            {
+                table[index][2] = to_string(addr_counter);
+                if (type == "adad")
+                {
+                    addr_counter += 4;
+                }
+            }
+            else
+            { // store line
+
+                table[index][2] = to_string(line);
+            }
+            table[index][3] = initialValue;
+            table[index][4] = to_string(isFunc);
             index++;
         }
     }
@@ -85,7 +126,7 @@ public:
 
         for (int i = 0; i < index; i++)
         {
-            fil << "name: " << table[i][0] << "    type: " << table[i][1] << "\n";
+            fil << "name: " << table[i][0] << "    datatype: " << table[i][1] << "   addr: " << table[i][2] << "   initValue: " << table[i][3] << "  type -> isFunction? " << table[i][4] << "\n";
         }
 
         fil.close();

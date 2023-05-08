@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
 		p.smt.print_table();
 		//cout << p.nl;
 		//p.find_replace("goto");
+		//p.separatetac("z = a + b");
 	}
 	else if (argc > 2)
 	{ // argument limit exceeds

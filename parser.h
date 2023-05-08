@@ -3,7 +3,9 @@
 #include "lexer.h"
 #include <fstream>
 #include <string.h>
-#include "symboltable.h"
+#include "symboltable.cpp"
+#include <vector>
+#include <sstream>
 // for future assignments leave it as it is
 
 class parser
@@ -15,7 +17,7 @@ public:
     int no_of_lines = 1;
     string entry;
     int nl = 1;
-    int tmp_count = 0;
+    int tmp_count = 1;
 
 public:
     void syntax_error();
@@ -44,6 +46,7 @@ public:
     void declare();
     void declare_(string id);
     void declare__(string id);
+    string separatetac(string exp);
     string val();
     void input();
     void input_();
@@ -67,8 +70,8 @@ public:
     // helper functions
     void ptabs(string n);
     void newline();
-    void update_tac(string data);
-    void find_replace(string text, int nl);
+    void update_tac(string data); // updates tac file
+    void find_replace(string text, string nl);
     string newtmp();
 };
 #endif

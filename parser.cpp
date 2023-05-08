@@ -128,7 +128,7 @@ void parser::_main()
         {
             ptabs("markazi");
             tabs--;
-            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme);
+            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, no_of_lines, "NULL", 1);
             expect(TokenType::KEYWD_MARKAZI);
             functype();
             if (_lexer.peek(1).tokenType == TokenType::OPEN_PARENTHESIS)
@@ -179,7 +179,7 @@ void parser::func()
         {
             ptabs("id");
             tabs--;
-            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme);
+            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, no_of_lines, "NULL", 1);
             expect(TokenType::IDENTIFIER);
             functype();
             if (_lexer.peek(1).tokenType == TokenType::OPEN_PARENTHESIS)
@@ -384,6 +384,7 @@ void parser::params()
     if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
     {
         ptabs("id");
+        smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, -1, "NULL", 0);
         tabs--;
         expect(TokenType::IDENTIFIER);
         vartype();
@@ -563,7 +564,14 @@ void parser::declare()
             ptabs("id");
             tabs--;
             string id = _lexer.peek(1).lexeme;
-            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme);
+            if (_lexer.peek(5).tokenType == TokenType::NUMERIC_LITERAL)
+            {
+                smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, -1, _lexer.peek(5).lexeme, 0);
+            }
+            else
+            {
+                smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, -1, "NULL", 0);
+            }
             expect(TokenType::IDENTIFIER);
             declare_(id);
         }
@@ -589,8 +597,10 @@ void parser::declare_(string id)
         expect(TokenType::ASSIGN);
         string v = val();
         string entry = id + " = " + v + "\n";
-        update_tac(entry);
+        string str_tac = separatetac(entry);
+        update_tac(str_tac);
         nl++;
+        // find_replace(entry, sep_str);
         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
         {
             ptabs(";");
@@ -657,8 +667,10 @@ void parser::declare__(string id)
         expect(TokenType::ASSIGN);
         string v = val();
         entry = id + " = " + v + "\n";
-        update_tac(entry);
+        string str_tac = separatetac(entry);
+        update_tac(str_tac);
         nl++;
+        // find_replace(entry, sep_str);
         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
         {
             ptabs(";");
@@ -706,7 +718,7 @@ string parser::val()
         string var = newtmp();
         if (_lexer.peek(1).tokenType == TokenType::IDENTIFIER)
         {
-            //string var = newtmp();
+            // string var = newtmp();
             ptabs("id");
             tabs--;
             string id = _lexer.peek(1).lexeme;
@@ -717,7 +729,7 @@ string parser::val()
                 tabs--;
                 expect(TokenType::OPEN_PARENTHESIS);
                 int s = args();
-                //string var = newtmp();
+                // string var = newtmp();
                 update_tac("call " + id + " " + to_string(s) + ", " + var + "\n");
                 nl++;
                 if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
@@ -940,6 +952,86 @@ void parser::output_()
     tabs--;
 }
 
+string parser::separatetac(string exp)
+{
+    //origin contains start of expression which is lhs of expression
+    string main_str = "", origin = "";
+    int i = 0;
+
+    while (1)
+    {
+        if (exp[i] != 32)
+        {
+            origin += exp[i];
+        }
+        if (exp[i] == 61)
+            break;
+
+        i++;
+    }
+    i++;
+
+    string str = "";
+    string op = "";
+
+    // separate operands and operators in str and op respectively
+    for (; exp[i] != '\0'; i++)
+    {
+        if ((exp[i] >= 37 && exp[i] <= 47) || (exp[i] >= 60 && exp[i] <= 62))
+        {
+            op.push_back(exp[i]);
+        }
+        else
+        {
+            if (exp[i] != 32)
+                str.push_back(exp[i]);
+        }
+    }
+
+    // generate tac code for expression
+    while (1)
+    {
+        string operand1 = "", operand2 = "";
+        operand1 += str.front();
+
+        //if operand is a temporary variable
+        if (str.front() == 't')
+        {
+            str.erase(0, 1);
+            operand1 += str.front();
+        }
+        str.erase(0, 1);
+
+        if (str.length() != 0)
+        {
+            operand2 += str.front();
+            str.erase(0, 1);
+        }
+
+        string _operator = "";
+        _operator += op.front();
+
+        if (op.length() != 0)
+        {
+            // print tac in file
+            string var = newtmp();
+            update_tac(var + " = " + operand1 + _operator + operand2 + "\n");
+            nl++;
+
+            str = var[1] + str;
+            str = var[0] + str;
+        }
+        else
+        {
+            //return final statement
+            return origin + " " + operand1 + "\n";
+        }
+        op.erase(0, 1);
+    }
+
+    return main_str;
+}
+
 void ::parser::output__()
 {
     ptabs("output__");
@@ -1014,7 +1106,7 @@ void parser::loop()
                 entry = "goto loopf\n";
                 update_tac(entry);
                 nl++;
-                find_replace("loopt", nl);
+                find_replace("loopt", to_string(nl));
                 if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
                 {
                     ptabs(")");
@@ -1024,7 +1116,7 @@ void parser::loop()
                     statements();
                     update_tac("goto " + to_string(ret_loop) + "\n");
                     nl++;
-                    find_replace("loopf", nl);
+                    find_replace("loopf", to_string(nl));
                     blke();
                 }
                 else
@@ -1299,7 +1391,7 @@ void parser::_if()
             nl++;
             update_tac("goto iff\n");
             nl++;
-            find_replace("ift", nl);
+            find_replace("ift", to_string(nl));
             if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
             {
                 ptabs(")");
@@ -1319,10 +1411,10 @@ void parser::_if()
                         statements();
                         update_tac("goto nn1\n");
                         nl++;
-                        find_replace("iff", nl); // false cond.
+                        find_replace("iff", to_string(nl)); // false cond.
                         _elseif();
                         _else();
-                        find_replace("nn1", nl);
+                        find_replace("nn1", to_string(nl));
                         blke();
                     }
                     else
@@ -1377,7 +1469,7 @@ void parser::_elseif()
                 nl++;
                 update_tac("goto elseiff\n");
                 nl++;
-                find_replace("elseift", nl);
+                find_replace("elseift", to_string(nl));
                 if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
                 {
                     ptabs(")");
@@ -1417,9 +1509,9 @@ void parser::_elseif()
                             statements();
                             update_tac("goto nn2\n");
                             nl++;
-                            find_replace("elseiff", nl); // false cond.
+                            find_replace("elseiff", to_string(nl)); // false cond.
                             _else();
-                            find_replace("nn2", nl);
+                            find_replace("nn2", to_string(nl));
                         }
                         else
                         {
@@ -1586,12 +1678,12 @@ void parser::update_tac(string data)
 {
     ofstream fil;
 
-    fil.open("tac.txt", ios::app);
+    fil.open("TAC.txt", ios::app);
 
     if (!fil)
     {
         fil.close();
-        fil.open("tac.txt");
+        fil.open("TAC.txt");
         fil << data;
         fil.close();
     }
@@ -1602,10 +1694,10 @@ void parser::update_tac(string data)
     }
 }
 
-void parser::find_replace(string text, int nl)
+void parser::find_replace(string text, string nl)
 {
     fstream fin;
-    fin.open("tac.txt", ios::in);
+    fin.open("TAC.txt", ios::in);
 
     string data, newdata;
 
@@ -1618,7 +1710,7 @@ void parser::find_replace(string text, int nl)
         int a = (int)data.find(text, 0);
         if (a != string::npos && found)
         {
-            data.replace(a, text.length(), to_string(nl));
+            data.replace(a, text.length(), nl);
             found = false;
         }
         newdata = newdata + data + "\n";
@@ -1627,7 +1719,7 @@ void parser::find_replace(string text, int nl)
 
     newdata.pop_back();
 
-    fin.open("tac.txt", ios::out);
+    fin.open("TAC.txt", ios::out);
 
     fin << newdata;
 
@@ -1637,5 +1729,6 @@ void parser::find_replace(string text, int nl)
 string parser::newtmp()
 {
     tmp_count++;
+    smt.insert_item("t" + to_string(tmp_count), "adad", -1, "NULL", 0);
     return "t" + to_string(tmp_count);
 }
