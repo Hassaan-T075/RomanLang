@@ -3,13 +3,13 @@
 name: calculateFib    datatype: adad   addr: 1   initValue: NULL  type -> isFunction? 1
 name: n    datatype: adad   addr: 0   initValue: NULL  type -> isFunction? 0
 name: c    datatype: adad   addr: 4   initValue: NULL  type -> isFunction? 0
-name: x    datatype: adad   addr: 8   initValue: 0  type -> isFunction? 0
+name: x    datatype: adad   addr: 8   initValue: 1  type -> isFunction? 0
 name: y    datatype: adad   addr: 12   initValue: 0  type -> isFunction? 0
 name: z    datatype: adad   addr: 16   initValue: NULL  type -> isFunction? 0
 name: i    datatype: adad   addr: 20   initValue: 1  type -> isFunction? 0
 name: t2    datatype: adad   addr: 24   initValue: NULL  type -> isFunction? 0
 name: t3    datatype: adad   addr: 28   initValue: NULL  type -> isFunction? 0
-name: markazi    datatype: khali   addr: 28   initValue: NULL  type -> isFunction? 1
+name: markazi    datatype: khali   addr: 27   initValue: NULL  type -> isFunction? 1
 name: num    datatype: adad   addr: 32   initValue: NULL  type -> isFunction? 0
 name: result    datatype: adad   addr: 36   initValue: NULL  type -> isFunction? 0
 name: t4    datatype: adad   addr: 40   initValue: NULL  type -> isFunction? 0

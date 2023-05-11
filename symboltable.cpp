@@ -1,5 +1,9 @@
+#ifndef MY_HEADER_FILE_H
+#define MY_HEADER_FILE_H
+
 #include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -132,6 +136,18 @@ public:
         fil.close();
     }
 
+    string find_addr(string addr)
+    {
+        for (int i = 0; i < index; i++)
+        {
+            // const char* tt = table[index][0].c_str();
+            // const char* adr = addr.c_str();
+            if(table[i][0] == addr)
+                return table[i][2];
+        }
+        return "0";
+    }
+
     ~symboltable()
     {
         for (int i = 0; i < max_size; i++)
@@ -141,3 +157,4 @@ public:
         delete[] table;
     }
 };
+#endif

@@ -1,0 +1,9 @@
+100 input
+200 output
+900 ret
+500 assignment
+
+10 +
+20 -
+30 *
+40 /

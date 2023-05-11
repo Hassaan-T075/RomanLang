@@ -128,7 +128,7 @@ void parser::_main()
         {
             ptabs("markazi");
             tabs--;
-            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, no_of_lines, "NULL", 1);
+            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, nl, "NULL", 1);
             expect(TokenType::KEYWD_MARKAZI);
             functype();
             if (_lexer.peek(1).tokenType == TokenType::OPEN_PARENTHESIS)
@@ -179,7 +179,7 @@ void parser::func()
         {
             ptabs("id");
             tabs--;
-            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, no_of_lines, "NULL", 1);
+            smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, nl, "NULL", 1);
             expect(TokenType::IDENTIFIER);
             functype();
             if (_lexer.peek(1).tokenType == TokenType::OPEN_PARENTHESIS)
@@ -600,6 +600,14 @@ void parser::declare_(string id)
         string str_tac = separatetac(entry);
         update_tac(str_tac);
         nl++;
+
+        // machine code
+        string id_a = smt.find_addr(id);
+        v = remove_spaces(v);
+        string val_a = smt.find_addr(v);
+        if(val_a != "0")
+            parser::v.mce("500 " + val_a + " " + id_a);
+
         // find_replace(entry, sep_str);
         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
         {
@@ -795,6 +803,11 @@ void parser::input_()
             entry = "in " + _lexer.peek(1).lexeme + "\n";
             update_tac(entry);
             nl++;
+
+            // machine code
+            string a = smt.find_addr(_lexer.peek(1).lexeme);
+            v.mce("200 " + a);
+
             expect(TokenType::IDENTIFIER);
             if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
             {
@@ -835,6 +848,11 @@ void parser::input_()
             entry = "out " + _lexer.peek(1).lexeme + "\n";
             update_tac(entry);
             nl++;
+
+            // machine code
+            string a = smt.find_addr(_lexer.peek(1).lexeme);
+            v.mce("100 " + a);
+
             expect(TokenType::STRING);
             if (_lexer.peek(1).tokenType == TokenType::INPUT)
             {
@@ -848,6 +866,11 @@ void parser::input_()
                     entry = "in " + _lexer.peek(1).lexeme + "\n";
                     update_tac(entry);
                     nl++;
+
+                    // machine code
+                    string a = smt.find_addr(_lexer.peek(1).lexeme);
+                    v.mce("200 " + a);
+
                     expect(TokenType::IDENTIFIER);
                     if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
                     {
@@ -940,6 +963,8 @@ void parser::output_()
         tabs--;
         expect(TokenType::OUTPUT);
         string n = out_();
+        string a = smt.find_addr(n);
+        v.mce("100 " + a);
         entry = "out " + n + "\n";
         update_tac(entry);
         nl++;
@@ -954,8 +979,8 @@ void parser::output_()
 
 string parser::separatetac(string exp)
 {
-    //origin contains start of expression which is lhs of expression
-    string main_str = "", origin = "";
+    // origin contains start of expression which is lhs of expression
+    string main_str = "", origin = "", origin_2 = "";
     int i = 0;
 
     while (1)
@@ -963,6 +988,8 @@ string parser::separatetac(string exp)
         if (exp[i] != 32)
         {
             origin += exp[i];
+            if (exp[i] != 61)
+                origin_2 += exp[i];
         }
         if (exp[i] == 61)
             break;
@@ -988,13 +1015,14 @@ string parser::separatetac(string exp)
         }
     }
 
+    //v.mce("\n");
     // generate tac code for expression
     while (1)
     {
         string operand1 = "", operand2 = "";
         operand1 += str.front();
 
-        //if operand is a temporary variable
+        // if operand is a temporary variable
         if (str.front() == 't')
         {
             str.erase(0, 1);
@@ -1018,12 +1046,25 @@ string parser::separatetac(string exp)
             update_tac(var + " = " + operand1 + _operator + operand2 + "\n");
             nl++;
 
+            // machine code
+            string opcode = to_string(op_translator(_operator));
+            string adr0 = smt.find_addr(var);
+            string adr1 = smt.find_addr(operand1);
+            string adr2 = smt.find_addr(operand2);
+
+            v.mce(opcode + " " + adr1 + " " + adr2 + " " + adr0);
+
             str = var[1] + str;
             str = var[0] + str;
         }
         else
         {
-            //return final statement
+            // machine code
+            string adr0 = smt.find_addr(origin_2);
+            string adr1 = smt.find_addr(operand1);
+            v.mce("500 " + adr1 + " " + adr0);
+
+            // return final statement
             return origin + " " + operand1 + "\n";
         }
         op.erase(0, 1);
@@ -1627,6 +1668,11 @@ void parser::ret_()
         ptabs("num");
         tabs--;
         entry = "ret " + _lexer.peek(1).lexeme + "\n";
+
+        // machine code
+        string a = smt.find_addr(_lexer.peek(1).lexeme);
+        v.mce("900 " + a);
+
         expect(TokenType::NUMERIC_LITERAL);
         update_tac(entry);
         nl++;
@@ -1654,6 +1700,7 @@ void parser::ret_()
     }
     else
     {
+        v.mce("900");
         update_tac("ret\n");
         nl++;
     }
@@ -1731,4 +1778,27 @@ string parser::newtmp()
     tmp_count++;
     smt.insert_item("t" + to_string(tmp_count), "adad", -1, "NULL", 0);
     return "t" + to_string(tmp_count);
+}
+
+string parser::remove_spaces(string s)
+{
+    string a = "";
+    for (size_t i = 0; s[i] != '\0'; i++)
+    {
+        if (s[i] != 32)
+            a = a + s[i];
+    }
+    return a;
+}
+
+int parser::op_translator(string op)
+{
+    if (op == "+")
+        return 10;
+    else if (op == "-")
+        return 20;
+    else if (op == "*")
+        return 30;
+    else if (op == "/")
+        return 40;
 }

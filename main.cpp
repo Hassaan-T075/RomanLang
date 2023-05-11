@@ -1,5 +1,7 @@
 #include <iostream>
 #include "parser.h"
+#include "symboltable.cpp"
+//#include "vm.cpp"
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -23,6 +25,16 @@ int main(int argc, char *argv[])
 		cout << "---Parse Tree---\n\n";
 		parser p(argv[1]);
 		p.smt.print_table();
+		
+		// vm v;
+		// v.vmst = &p.smt;
+		// v.machine_code("TAC.txt");
+		//v.vmst->print_table();
+		//v.vmst.print_table();
+		//v.machine_code("TAC.txt");
+		// string a = "z";
+		// p.smt.find_addr(a);
+		
 		//cout << p.nl;
 		//p.find_replace("goto");
 		//p.separatetac("z = a + b");

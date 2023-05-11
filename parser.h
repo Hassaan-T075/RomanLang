@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string.h>
 #include "symboltable.cpp"
+#include "vm.cpp"
 #include <vector>
 #include <sstream>
 // for future assignments leave it as it is
@@ -18,6 +19,7 @@ public:
     string entry;
     int nl = 1;
     int tmp_count = 1;
+    vm v;
 
 public:
     void syntax_error();
@@ -73,5 +75,7 @@ public:
     void update_tac(string data); // updates tac file
     void find_replace(string text, string nl);
     string newtmp();
+    string remove_spaces(string s);
+    int op_translator(string op);
 };
 #endif
