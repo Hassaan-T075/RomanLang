@@ -1210,10 +1210,17 @@ void parser::loop()
                 // entry = "if exp goto loopt\n";
                 update_tac(entry);
                 nl++;
+
+                //loop condition
+                string _expression = remove_spaces(exp_str);
+                vm_conditionals(_expression, "loopt"); // true condition
+
                 entry = "goto loopf\n";
                 update_tac(entry);
+                v.mce("800 loopf");
                 nl++;
                 find_replace("loopt", to_string(nl));
+                find_replace_machine_code("loopt", to_string(nl));
                 if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
                 {
                     ptabs(")");
@@ -1222,8 +1229,10 @@ void parser::loop()
                     blks();
                     statements();
                     update_tac("goto " + to_string(ret_loop) + "\n");
+                    v.mce("800 " + to_string(ret_loop));
                     nl++;
                     find_replace("loopf", to_string(nl));
+                    find_replace_machine_code("loopf", to_string(nl));
                     blke();
                 }
                 else
@@ -1494,17 +1503,18 @@ void parser::_if()
             string exp_str = exp();
             entry = "if " + exp_str + "goto ift\n";
             update_tac(entry);
+            nl++;
 
             // if condition
             string _expression = remove_spaces(exp_str);
             vm_conditionals(_expression, "ift"); // true condition
 
             // entry = "if exp goto t1\n";
-            nl++;
             update_tac("goto iff\n");
             v.mce("800 iff");
             nl++;
             find_replace("ift", to_string(nl));
+            find_replace_machine_code("ift", to_string(nl));
             if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
             {
                 ptabs(")");
@@ -1523,11 +1533,14 @@ void parser::_if()
                         blks();
                         statements();
                         update_tac("goto nn1\n");
+                        v.mce("800 nn1");
                         nl++;
                         find_replace("iff", to_string(nl)); // false cond.
+                        find_replace_machine_code("iff", to_string(nl));
                         _elseif();
                         _else();
                         find_replace("nn1", to_string(nl));
+                        find_replace_machine_code("nn1", to_string(nl));
                         blke();
                     }
                     else
@@ -1580,9 +1593,15 @@ void parser::_elseif()
                 // entry = "if exp goto t2\n";
                 update_tac(entry);
                 nl++;
+
+                string _expression = remove_spaces(exp_str);
+                vm_conditionals(_expression, "elseift"); // true condition
+
                 update_tac("goto elseiff\n");
+                v.mce("800 elseiff");
                 nl++;
                 find_replace("elseift", to_string(nl));
+                find_replace_machine_code("elseift", to_string(nl));
                 if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
                 {
                     ptabs(")");
@@ -1621,10 +1640,13 @@ void parser::_elseif()
                             }
                             statements();
                             update_tac("goto nn2\n");
+                            v.mce("800 nn2");
                             nl++;
                             find_replace("elseiff", to_string(nl)); // false cond.
+                            find_replace_machine_code("elseiff", to_string(nl));
                             _else();
                             find_replace("nn2", to_string(nl));
+                            find_replace_machine_code("nn2", to_string(nl));
                         }
                         else
                         {
@@ -1853,6 +1875,38 @@ void parser::find_replace(string text, string nl)
     fin.close();
 }
 
+void parser::find_replace_machine_code(string text, string nl)
+{
+    fstream fin;
+    fin.open("mce.txt", ios::in);
+
+    string data, newdata;
+
+    newdata = "";
+    bool found = true;
+
+    while (fin)
+    {
+        getline(fin, data);
+        int a = (int)data.find(text, 0);
+        if (a != string::npos && found)
+        {
+            data.replace(a, text.length(), nl);
+            found = false;
+        }
+        newdata = newdata + data + "\n";
+    }
+    fin.close();
+
+    newdata.pop_back();
+
+    fin.open("mce.txt", ios::out);
+
+    fin << newdata;
+
+    fin.close();
+}
+
 string parser::newtmp()
 {
     tmp_count++;
@@ -1912,13 +1966,13 @@ void parser::vm_conditionals(string exp, string cond)
     }
     string adr1 = smt.find_addr(operand1);
 
-    //check later
-    // if (adr1 == "0") // address not found, make temporary variable
-    // {
-    //     string t = "t" + to_string(++tmp_count);
-    //     smt.insert_item(t, "temp", -1, operand1, false);
-    //     adr1 = smt.find_addr(t);
-    // }
+    // check later
+    //  if (adr1 == "0") // address not found, make temporary variable
+    //  {
+    //      string t = "t" + to_string(++tmp_count);
+    //      smt.insert_item(t, "temp", -1, operand1, false);
+    //      adr1 = smt.find_addr(t);
+    //  }
 
     op += exp[i];
     i++;

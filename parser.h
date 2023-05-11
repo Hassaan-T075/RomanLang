@@ -74,6 +74,7 @@ public:
     void newline();
     void update_tac(string data); // updates tac file
     void find_replace(string text, string nl);
+    void find_replace_machine_code(string text, string nl);
     string newtmp();
     string remove_spaces(string s);
     int op_translator(string op);
