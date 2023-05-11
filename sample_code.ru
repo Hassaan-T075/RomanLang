@@ -1,6 +1,6 @@
 kaam calculateFib@adad (n@adad | c@adad) karo
-	rakho x@adad := 0;
-	rakho y@adad := 0;
+	rakho x@adad := 6;
+	rakho y@adad := 4;
 	rakho z@adad;
 
 	agar (n < 0) to phir karo

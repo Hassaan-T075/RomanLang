@@ -1,0 +1,330 @@
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t10 = x+y
+z= t1
+x= y
+y= z
+t11 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t15
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t10 = x+y
+z= t1
+x= y
+y= z
+t11 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t15
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t10 = x+y
+z= t1
+x= y
+y= z
+t11 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t15
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t10 = x+y
+z= t1
+x= y
+y= z
+t11 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t15
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t10 = x+y
+z= t1
+x= y
+y= z
+t11 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t15
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t10 = x+y
+z= t1
+x= y
+y= z
+t11 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t15
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t10 = x+y
+z= t1
+x= y
+y= z
+t11 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t15
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t12 = x+y
+z= t1
+x= y
+y= z
+t13 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t17
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    0     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t11 = x+y
+z= t1
+x= y
+y= z
+t12 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t16
+result= t1
+ret 0
+x= 6
+y= 4
+if    n  <    9     goto 5
+goto 8
+out `munfi number daal diya\n`
+ret 0
+goto 26
+if    n  =    0     goto 10
+goto 13
+out `yar 0 hai!\n`
+ret 0
+goto 26
+out `\nfibonacci series: `
+i= 1
+if    i    -   1  >=    n       goto 17
+goto 26
+out x
+out ` `
+t11 = x+y
+z= t1
+x= y
+y= z
+t12 = i+1
+i= t1
+goto 15
+ret 0
+out `Enter the number`
+in num
+param num
+param 0
+call calculateFib 2, t16
+result= t1
+ret 0

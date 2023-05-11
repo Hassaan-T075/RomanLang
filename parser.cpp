@@ -602,11 +602,11 @@ void parser::declare_(string id)
         nl++;
 
         // machine code
-        string id_a = smt.find_addr(id);
-        v = remove_spaces(v);
-        string val_a = smt.find_addr(v);
-        if(val_a != "0")
-            parser::v.mce("500 " + val_a + " " + id_a);
+        // string id_a = smt.find_addr(id);
+        // v = remove_spaces(v);
+        // string val_a = smt.find_addr(v);
+        // if (val_a != "0")
+        //     parser::v.mce("500 " + val_a + " " + id_a);
 
         // find_replace(entry, sep_str);
         if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
@@ -675,6 +675,12 @@ void parser::declare__(string id)
         expect(TokenType::ASSIGN);
         string v = val();
         entry = id + " = " + v + "\n";
+
+        // // if val() v is not in symbol table then create a temporary varible
+        // string s = smt.find_addr(v);
+        // if (s == "0") // address not found
+        //     smt.insert_item("t" + to_string(++tmp_count), "temp", -1, v, false);
+
         string str_tac = separatetac(entry);
         update_tac(str_tac);
         nl++;
@@ -806,7 +812,7 @@ void parser::input_()
 
             // machine code
             string a = smt.find_addr(_lexer.peek(1).lexeme);
-            v.mce("200 " + a);
+            v.mce("100 " + a);
 
             expect(TokenType::IDENTIFIER);
             if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
@@ -851,7 +857,15 @@ void parser::input_()
 
             // machine code
             string a = smt.find_addr(_lexer.peek(1).lexeme);
-            v.mce("100 " + a);
+
+            if (a == "0") // address not found
+            {
+                string t = "t" + to_string(++tmp_count);
+                smt.insert_item(t, "temp", -1, _lexer.peek(1).lexeme, false);
+                a = smt.find_addr(t);
+            }
+
+            v.mce("200 " + a);
 
             expect(TokenType::STRING);
             if (_lexer.peek(1).tokenType == TokenType::INPUT)
@@ -869,7 +883,15 @@ void parser::input_()
 
                     // machine code
                     string a = smt.find_addr(_lexer.peek(1).lexeme);
-                    v.mce("200 " + a);
+
+                    if (a == "0") // address not found
+                    {
+                        string t = "t" + to_string(++tmp_count);
+                        smt.insert_item(t, "temp", -1, _lexer.peek(1).lexeme, false);
+                        a = smt.find_addr(t);
+                    }
+
+                    v.mce("100 " + a);
 
                     expect(TokenType::IDENTIFIER);
                     if (_lexer.peek(1).tokenType == TokenType::SEMICOLON)
@@ -963,11 +985,22 @@ void parser::output_()
         tabs--;
         expect(TokenType::OUTPUT);
         string n = out_();
-        string a = smt.find_addr(n);
-        v.mce("100 " + a);
         entry = "out " + n + "\n";
         update_tac(entry);
         nl++;
+
+        string a = smt.find_addr(n);
+
+        // if n is not in symbol table then create a temporary varible
+        // string s = smt.find_addr(v);
+        if (a == "0") // address not found
+        {
+            string t = "t" + to_string(++tmp_count);
+            smt.insert_item(t, "temp", -1, n, false);
+            a = smt.find_addr(t);
+        }
+        v.mce("200 " + a);
+
         output__();
     }
     else
@@ -1015,8 +1048,8 @@ string parser::separatetac(string exp)
         }
     }
 
-    //v.mce("\n");
-    // generate tac code for expression
+    // v.mce("\n");
+    //  generate tac code for expression
     while (1)
     {
         string operand1 = "", operand2 = "";
@@ -1028,6 +1061,15 @@ string parser::separatetac(string exp)
             str.erase(0, 1);
             operand1 += str.front();
         }
+
+        // remove in case of errors
+        //  if operand is a numeric value
+        //  while (str.front() >= 48 && str.front() <= 56)
+        //  {
+        //      str.erase(0, 1);
+        //      operand1 += str.front();
+        //  }
+
         str.erase(0, 1);
 
         if (str.length() != 0)
@@ -1049,8 +1091,22 @@ string parser::separatetac(string exp)
             // machine code
             string opcode = to_string(op_translator(_operator));
             string adr0 = smt.find_addr(var);
+
             string adr1 = smt.find_addr(operand1);
+            if (adr1 == "0") // address not found
+            {
+                string t = "t" + to_string(++tmp_count);
+                smt.insert_item(t, "temp", -1, operand1, false);
+                adr1 = smt.find_addr(t);
+            }
+
             string adr2 = smt.find_addr(operand2);
+            if (adr2 == "0") // address not found
+            {
+                string t = "t" + to_string(++tmp_count);
+                smt.insert_item(t, "temp", -1, operand2, false);
+                adr2 = smt.find_addr(t);
+            }
 
             v.mce(opcode + " " + adr1 + " " + adr2 + " " + adr0);
 
@@ -1062,6 +1118,16 @@ string parser::separatetac(string exp)
             // machine code
             string adr0 = smt.find_addr(origin_2);
             string adr1 = smt.find_addr(operand1);
+
+            // if adr1 is not in symbol table then create a temporary varible
+            // string s = smt.find_addr(adr1);
+            if (adr1 == "0") // address not found
+            {
+                string t = "t" + to_string(++tmp_count);
+                smt.insert_item(t, "temp", -1, operand1, false);
+                adr1 = smt.find_addr(t);
+            }
+
             v.mce("500 " + adr1 + " " + adr0);
 
             // return final statement
@@ -1427,10 +1493,16 @@ void parser::_if()
             expect(TokenType::OPEN_PARENTHESIS);
             string exp_str = exp();
             entry = "if " + exp_str + "goto ift\n";
-            // entry = "if exp goto t1\n";
             update_tac(entry);
+
+            // if condition
+            string _expression = remove_spaces(exp_str);
+            vm_conditionals(_expression, "ift"); // true condition
+
+            // entry = "if exp goto t1\n";
             nl++;
             update_tac("goto iff\n");
+            v.mce("800 iff");
             nl++;
             find_replace("ift", to_string(nl));
             if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
@@ -1671,6 +1743,14 @@ void parser::ret_()
 
         // machine code
         string a = smt.find_addr(_lexer.peek(1).lexeme);
+
+        if (a == "0") // address not found
+        {
+            string t = "t" + to_string(++tmp_count);
+            smt.insert_item(t, "temp", -1, _lexer.peek(1).lexeme, false);
+            a = smt.find_addr(t);
+        }
+
         v.mce("900 " + a);
 
         expect(TokenType::NUMERIC_LITERAL);
@@ -1801,4 +1881,69 @@ int parser::op_translator(string op)
         return 30;
     else if (op == "/")
         return 40;
+    else if (op == "%")
+        return 50;
+    else if (op == "<")
+        return 1000;
+    else if (op == "<=")
+        return 1010;
+    else if (op == ">")
+        return 2000;
+    else if (op == ">=")
+        return 2010;
+    else if (op == "=")
+        return 3000;
+    else if (op == "<>")
+        return 4000;
+}
+
+void parser::vm_conditionals(string exp, string cond)
+{
+    int i = 0;
+    string operand1, op, operand2;
+    stringstream ss;
+
+    operand1 += exp[i];
+    i++;
+    if (exp[i - 1] == 't') // if first expression is a temporary variable
+    {
+        operand1 = operand1 + exp[i];
+        i++;
+    }
+    string adr1 = smt.find_addr(operand1);
+
+    //check later
+    // if (adr1 == "0") // address not found, make temporary variable
+    // {
+    //     string t = "t" + to_string(++tmp_count);
+    //     smt.insert_item(t, "temp", -1, operand1, false);
+    //     adr1 = smt.find_addr(t);
+    // }
+
+    op += exp[i];
+    i++;
+    if (exp[i] == '=' || exp[i] == '>') // if
+    {
+        op = op + exp[i];
+        i++;
+    }
+    string _opcode = to_string(op_translator(op));
+
+    operand2 += exp[i];
+
+    i++;
+    if (exp[i - 1] == 't') // if first expression is a temporary variable
+    {
+        operand2 = operand2 + exp[i];
+        i++;
+    }
+    string adr2 = smt.find_addr(operand2);
+    if (adr2 == "0") // address not found, make temporary variable
+    {
+        string t = "t" + to_string(++tmp_count);
+        smt.insert_item(t, "temp", -1, operand2, false);
+        adr2 = smt.find_addr(t);
+    }
+
+    v.mce(_opcode + " " + adr1 + " " + adr2 + " " + cond);
 }

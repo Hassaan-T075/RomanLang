@@ -3,13 +3,27 @@
 name: calculateFib    datatype: adad   addr: 1   initValue: NULL  type -> isFunction? 1
 name: n    datatype: adad   addr: 0   initValue: NULL  type -> isFunction? 0
 name: c    datatype: adad   addr: 4   initValue: NULL  type -> isFunction? 0
-name: x    datatype: adad   addr: 8   initValue: 1  type -> isFunction? 0
-name: y    datatype: adad   addr: 12   initValue: 0  type -> isFunction? 0
-name: z    datatype: adad   addr: 16   initValue: NULL  type -> isFunction? 0
-name: i    datatype: adad   addr: 20   initValue: 1  type -> isFunction? 0
-name: t2    datatype: adad   addr: 24   initValue: NULL  type -> isFunction? 0
-name: t3    datatype: adad   addr: 28   initValue: NULL  type -> isFunction? 0
+name: x    datatype: adad   addr: 8   initValue: 6  type -> isFunction? 0
+name: t1    datatype: temp   addr: 12   initValue: 6  type -> isFunction? 0
+name: y    datatype: adad   addr: 16   initValue: 4  type -> isFunction? 0
+name: t2    datatype: temp   addr: 20   initValue: 4  type -> isFunction? 0
+name: z    datatype: adad   addr: 24   initValue: NULL  type -> isFunction? 0
+name: t3    datatype: temp   addr: 28   initValue: 9  type -> isFunction? 0
+name: t4    datatype: temp   addr: 32   initValue: `munfi number daal diya\n`  type -> isFunction? 0
+name: t5    datatype: temp   addr: 36   initValue: 0  type -> isFunction? 0
+name: t6    datatype: temp   addr: 40   initValue: `yar 0 hai!\n`  type -> isFunction? 0
+name: t7    datatype: temp   addr: 44   initValue: 0  type -> isFunction? 0
+name: t8    datatype: temp   addr: 48   initValue: `\nfibonacci series: `  type -> isFunction? 0
+name: i    datatype: adad   addr: 52   initValue: 1  type -> isFunction? 0
+name: t9    datatype: temp   addr: 56   initValue: 1  type -> isFunction? 0
+name: t10    datatype: temp   addr: 60   initValue: ` `  type -> isFunction? 0
+name: t11    datatype: adad   addr: 64   initValue: NULL  type -> isFunction? 0
+name: t12    datatype: adad   addr: 68   initValue: NULL  type -> isFunction? 0
+name: t13    datatype: temp   addr: 72   initValue: 1  type -> isFunction? 0
+name: t14    datatype: temp   addr: 76   initValue: 0  type -> isFunction? 0
 name: markazi    datatype: khali   addr: 27   initValue: NULL  type -> isFunction? 1
-name: num    datatype: adad   addr: 32   initValue: NULL  type -> isFunction? 0
-name: result    datatype: adad   addr: 36   initValue: NULL  type -> isFunction? 0
-name: t4    datatype: adad   addr: 40   initValue: NULL  type -> isFunction? 0
+name: num    datatype: adad   addr: 80   initValue: NULL  type -> isFunction? 0
+name: t15    datatype: temp   addr: 84   initValue: `Enter the number`  type -> isFunction? 0
+name: result    datatype: adad   addr: 88   initValue: NULL  type -> isFunction? 0
+name: t16    datatype: adad   addr: 92   initValue: NULL  type -> isFunction? 0
+name: t17    datatype: temp   addr: 96   initValue: 0  type -> isFunction? 0

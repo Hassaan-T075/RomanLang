@@ -18,7 +18,7 @@ public:
     int no_of_lines = 1;
     string entry;
     int nl = 1;
-    int tmp_count = 1;
+    int tmp_count = 0;
     vm v;
 
 public:
@@ -77,5 +77,6 @@ public:
     string newtmp();
     string remove_spaces(string s);
     int op_translator(string op);
+    void vm_conditionals(string exp, string cond);
 };
 #endif
