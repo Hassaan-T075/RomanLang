@@ -19,6 +19,7 @@ public:
     string entry;
     int nl = 1;
     int tmp_count = 0;
+    int tmp_count_1 = 0;
     vm v;
 
 public:

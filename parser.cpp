@@ -860,7 +860,7 @@ void parser::input_()
 
             if (a == "0") // address not found
             {
-                string t = "t" + to_string(++tmp_count);
+                string t = "virtual_t" + to_string(++tmp_count);
                 smt.insert_item(t, "temp", -1, _lexer.peek(1).lexeme, false);
                 a = smt.find_addr(t);
             }
@@ -886,7 +886,7 @@ void parser::input_()
 
                     if (a == "0") // address not found
                     {
-                        string t = "t" + to_string(++tmp_count);
+                        string t = "virtual_t" + to_string(++tmp_count);
                         smt.insert_item(t, "temp", -1, _lexer.peek(1).lexeme, false);
                         a = smt.find_addr(t);
                     }
@@ -995,7 +995,7 @@ void parser::output_()
         // string s = smt.find_addr(v);
         if (a == "0") // address not found
         {
-            string t = "t" + to_string(++tmp_count);
+            string t = "virtual_t" + to_string(++tmp_count);
             smt.insert_item(t, "temp", -1, n, false);
             a = smt.find_addr(t);
         }
@@ -1060,6 +1060,11 @@ string parser::separatetac(string exp)
         {
             str.erase(0, 1);
             operand1 += str.front();
+            if (str[1] >= 48 && str[1] <=56)
+            {
+                str.erase(0, 1);
+                operand1 += str.front();
+            }
         }
 
         // remove in case of errors
@@ -1080,6 +1085,11 @@ string parser::separatetac(string exp)
 
         string _operator = "";
         _operator += op.front();
+        // if(op[1] == '=')
+        // {
+        //     op.erase(0,1);
+        //     _operator += op.front();
+        // }
 
         if (op.length() != 0)
         {
@@ -1095,7 +1105,7 @@ string parser::separatetac(string exp)
             string adr1 = smt.find_addr(operand1);
             if (adr1 == "0") // address not found
             {
-                string t = "t" + to_string(++tmp_count);
+                string t = "virtual_t" + to_string(++tmp_count);
                 smt.insert_item(t, "temp", -1, operand1, false);
                 adr1 = smt.find_addr(t);
             }
@@ -1103,13 +1113,15 @@ string parser::separatetac(string exp)
             string adr2 = smt.find_addr(operand2);
             if (adr2 == "0") // address not found
             {
-                string t = "t" + to_string(++tmp_count);
+                string t = "virtual_t" + to_string(++tmp_count);
                 smt.insert_item(t, "temp", -1, operand2, false);
                 adr2 = smt.find_addr(t);
             }
 
             v.mce(opcode + " " + adr1 + " " + adr2 + " " + adr0);
 
+            // if(tmp_count > 9)
+            //     str = var[2] + str;
             str = var[1] + str;
             str = var[0] + str;
         }
@@ -1123,7 +1135,7 @@ string parser::separatetac(string exp)
             // string s = smt.find_addr(adr1);
             if (adr1 == "0") // address not found
             {
-                string t = "t" + to_string(++tmp_count);
+                string t = "virtual_t" + to_string(++tmp_count);
                 smt.insert_item(t, "temp", -1, operand1, false);
                 adr1 = smt.find_addr(t);
             }
@@ -1205,13 +1217,36 @@ void parser::loop()
                 tabs--;
                 expect(TokenType::OPEN_PARENTHESIS);
                 string exp_str = exp();
+                string no_space_exp = remove_spaces(exp_str);
+                string temp = "";
+                string remaining = "";
+
+                size_t ii;
+                for (ii = 0; no_space_exp[ii] != '<' && no_space_exp[ii] != '>' && no_space_exp[ii] != '='; ii++)
+                {
+                    temp += no_space_exp[ii];
+                }
+
+                // ii--;
+                while (no_space_exp[ii] != '\0')
+                {
+                    remaining += no_space_exp[ii];
+                    ii++;
+                }
+
+                exp_str = separatetac("i =" + temp);
+
                 int ret_loop = nl;
+                exp_str.erase(exp_str.length() - 1, 1);
+                exp_str.erase(0, 1);
+                exp_str.erase(0, 1);
+                exp_str = exp_str + " " + remaining;
                 entry = "if " + exp_str + " goto loopt\n";
                 // entry = "if exp goto loopt\n";
                 update_tac(entry);
                 nl++;
 
-                //loop condition
+                // loop condition
                 string _expression = remove_spaces(exp_str);
                 vm_conditionals(_expression, "loopt"); // true condition
 
@@ -1768,7 +1803,7 @@ void parser::ret_()
 
         if (a == "0") // address not found
         {
-            string t = "t" + to_string(++tmp_count);
+            string t = "virtual_t" + to_string(++tmp_count);
             smt.insert_item(t, "temp", -1, _lexer.peek(1).lexeme, false);
             a = smt.find_addr(t);
         }
@@ -1909,9 +1944,9 @@ void parser::find_replace_machine_code(string text, string nl)
 
 string parser::newtmp()
 {
-    tmp_count++;
-    smt.insert_item("t" + to_string(tmp_count), "adad", -1, "NULL", 0);
-    return "t" + to_string(tmp_count);
+    tmp_count_1++;
+    smt.insert_item("t" + to_string(tmp_count_1), "adad", -1, "NULL", 0);
+    return "t" + to_string(tmp_count_1);
 }
 
 string parser::remove_spaces(string s)
@@ -1994,7 +2029,7 @@ void parser::vm_conditionals(string exp, string cond)
     string adr2 = smt.find_addr(operand2);
     if (adr2 == "0") // address not found, make temporary variable
     {
-        string t = "t" + to_string(++tmp_count);
+        string t = "virtual_t" + to_string(++tmp_count);
         smt.insert_item(t, "temp", -1, operand2, false);
         adr2 = smt.find_addr(t);
     }
