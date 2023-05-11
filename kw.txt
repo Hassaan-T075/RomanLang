@@ -1,7 +1,7 @@
 100 input
 200 output
-900 ret
 500 assignment
+900 ret
 
 10 +
 20 -

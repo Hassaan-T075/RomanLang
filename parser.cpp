@@ -938,6 +938,147 @@ void parser::input_()
     tabs--;
 }
 
+string parser::tacsolver(string exp)
+{
+    // origin contains start of expression which is lhs of expression
+    string main_str = "", origin = "", origin_2 = "";
+    int i = 0;
+
+    while (1)
+    {
+        if (exp[i] != 32)
+        {
+            origin += exp[i];
+            if (exp[i] != 61)
+                origin_2 += exp[i];
+        }
+        if (exp[i] == 61)
+            break;
+
+        i++;
+    }
+    i++;
+
+    string str = "";
+    string op = "";
+
+    // separate operands and operators in str and op respectively
+    for (; exp[i] != '\0'; i++)
+    {
+        if ((exp[i] >= 37 && exp[i] <= 47) || (exp[i] >= 60 && exp[i] <= 62))
+        {
+            op.push_back(exp[i]);
+        }
+        else
+        {
+            if (exp[i] != 32)
+                str.push_back(exp[i]);
+        }
+    }
+
+    // v.mce("\n");
+    //  generate tac code for expression
+    while (1)
+    {
+        string operand1 = "", operand2 = "";
+        operand1 += str.front();
+
+        // if operand is a temporary variable
+        if (str.front() == 't')
+        {
+            str.erase(0, 1);
+            operand1 += str.front();
+            if (str[1] >= 48 && str[1] <=56)
+            {
+                str.erase(0, 1);
+                operand1 += str.front();
+            }
+        }
+
+        // remove in case of errors
+        //  if operand is a numeric value
+        //  while (str.front() >= 48 && str.front() <= 56)
+        //  {
+        //      str.erase(0, 1);
+        //      operand1 += str.front();
+        //  }
+
+        str.erase(0, 1);
+
+        if (str.length() != 0)
+        {
+            operand2 += str.front();
+            str.erase(0, 1);
+        }
+
+        string _operator = "";
+        _operator += op.front();
+        // if(op[1] == '=')
+        // {
+        //     op.erase(0,1);
+        //     _operator += op.front();
+        // }
+
+        if (op.length() != 0)
+        {
+            // print tac in file
+            string var = newtmp();
+            update_tac(var + " = " + operand1 + _operator + operand2 + "\n");
+            nl++;
+
+            // machine code
+            string opcode = to_string(op_translator(_operator));
+            string adr0 = smt.find_addr(var);
+
+            string adr1 = smt.find_addr(operand1);
+            if (adr1 == "0") // address not found
+            {
+                string t = "virtual_t" + to_string(++tmp_count);
+                smt.insert_item(t, "temp", -1, operand1, false);
+                adr1 = smt.find_addr(t);
+            }
+
+            string adr2 = smt.find_addr(operand2);
+            if (adr2 == "0") // address not found
+            {
+                string t = "virtual_t" + to_string(++tmp_count);
+                smt.insert_item(t, "temp", -1, operand2, false);
+                adr2 = smt.find_addr(t);
+            }
+
+            v.mce(opcode + " " + adr1 + " " + adr2 + " " + adr0);
+
+            // if(tmp_count > 9)
+            //     str = var[2] + str;
+            str = var[1] + str;
+            str = var[0] + str;
+        }
+        else
+        {
+            // machine code
+            string adr0 = smt.find_addr(origin_2);
+            string adr1 = smt.find_addr(operand1);
+
+            // if adr1 is not in symbol table then create a temporary varible
+            // string s = smt.find_addr(adr1);
+            if (adr1 == "0") // address not found
+            {
+                string t = "virtual_t" + to_string(++tmp_count);
+                smt.insert_item(t, "temp", -1, operand1, false);
+                adr1 = smt.find_addr(t);
+            }
+
+            //v.mce("500 " + adr1 + " " + adr0);
+
+            // return final statement
+            return origin + " " + operand1 + "\n";
+        }
+        op.erase(0, 1);
+    }
+
+    return main_str;
+}
+
 void parser::output()
 {
     ptabs("output");
@@ -1234,7 +1375,7 @@ void parser::loop()
                     ii++;
                 }
 
-                exp_str = separatetac("i =" + temp);
+                exp_str = tacsolver("i =" + temp);
 
                 int ret_loop = nl;
                 exp_str.erase(exp_str.length() - 1, 1);

@@ -38,6 +38,7 @@ public:
     void func();
     void functype();
     void params();
+    string tacsolver(string exp);
     void sep();
     int args();
     int args_();
