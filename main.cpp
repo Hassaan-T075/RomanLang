@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
 		cout << "---Parse Tree---\n\n";
 		parser p(argv[1]);
 		p.smt.print_table();
+		p.shararat();
 		
 		// for (size_t i = 0; i < p.param_count; i++)
 		// {

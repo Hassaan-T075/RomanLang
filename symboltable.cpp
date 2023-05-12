@@ -49,7 +49,7 @@ public:
             if (line == -1) // store memory addr
             {
                 table[index][2] = to_string(addr_counter);
-                if (type == "adad" || type == "temp")
+                if (type == "adad" || type == "temp" || type =="str_temp")
                 {
                     addr_counter += 4;
                 }
@@ -104,7 +104,7 @@ public:
             if (line == -1) // store memory addr
             {
                 table[index][2] = to_string(addr_counter);
-                if (type == "adad" || type == "temp")
+                if (type == "adad" || type == "temp" || type =="str_temp")
                 {
                     addr_counter += 4;
                 }

@@ -1,6 +1,8 @@
 100 input
-200 output
+200 output integer
+210 output string
 500 assignment
+700 param
 900 ret
 
 10 +

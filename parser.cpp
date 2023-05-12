@@ -426,7 +426,12 @@ int parser::args()
         update_tac(entry);
         nl++;
 
-        //set parameter value
+        string ttemp = smt.find_addr(formal_param[actual_count]);
+        string ttemp2 = smt.find_addr(_lexer.peek(1).lexeme);
+        v.mce("700 " + ttemp2 + " " + ttemp);
+
+        // set parameter value
+        // smt.update_value("num", "9");
         string param_value = smt.find_value_by_name(_lexer.peek(1).lexeme);
         smt.update_value(formal_param[actual_count], param_value);
         actual_count++;
@@ -443,7 +448,17 @@ int parser::args()
         update_tac(entry);
         nl++;
 
-        //set parameter value
+        string ttemp = smt.find_addr(formal_param[actual_count]);
+        string ttemp2 = smt.find_addr(_lexer.peek(1).lexeme);
+        if (ttemp2 == "0") // address not found, make temporary variable
+        {
+            string t = "temp" + to_string(++tmp_count);
+            smt.insert_item(t, "temp", -1, _lexer.peek(1).lexeme, false);
+            ttemp2 = smt.find_addr(t);
+        }
+        v.mce("700 " + ttemp2 + " " + ttemp);
+
+        // set parameter value
         smt.update_value(formal_param[actual_count], _lexer.peek(1).lexeme);
         actual_count++;
 
@@ -877,11 +892,11 @@ void parser::input_()
             if (a == "0") // address not found
             {
                 string t = "virtual_t" + to_string(++tmp_count);
-                smt.insert_item(t, "temp", -1, _lexer.peek(1).lexeme, false);
+                smt.insert_item(t, "str_temp", -1, _lexer.peek(1).lexeme, false);
                 a = smt.find_addr(t);
             }
 
-            v.mce("200 " + a);
+            v.mce("210 " + a);
 
             expect(TokenType::STRING);
             if (_lexer.peek(1).tokenType == TokenType::INPUT)
@@ -954,6 +969,39 @@ void parser::input_()
     tabs--;
 }
 
+void parser::shararat()
+{
+    fstream fin;
+    fin.open("mce.txt", ios::in);
+
+    string data, newdata;
+
+    newdata = "";
+    // bool found = true;
+
+    while (fin)
+    {
+        getline(fin, data);
+        // int a = (int)data.find(text, 0);
+        // if (a != string::npos && found)
+        //{
+        //   data.replace(a, text.length(), nl);
+        // found = false;
+        //}
+        newdata = newdata + data + "\n";
+    }
+    fin.close();
+
+    newdata = "800 " + smt.find_addr("markazi") + "\n" + newdata;
+    newdata.erase(newdata.length() - 1, 1);
+
+    fin.open("mce.txt", ios::out);
+
+    fin << newdata;
+
+    fin.close();
+}
+
 string parser::tacsolver(string exp)
 {
     // origin contains start of expression which is lhs of expression
@@ -1004,7 +1052,7 @@ string parser::tacsolver(string exp)
         {
             str.erase(0, 1);
             operand1 += str.front();
-            if (str[1] >= 48 && str[1] <=56)
+            if (str[1] >= 48 && str[1] <= 56)
             {
                 str.erase(0, 1);
                 operand1 += str.front();
@@ -1084,7 +1132,7 @@ string parser::tacsolver(string exp)
                 adr1 = smt.find_addr(t);
             }
 
-            //v.mce("500 " + adr1 + " " + adr0);
+            // v.mce("500 " + adr1 + " " + adr0);
 
             // return final statement
             return origin + " " + operand1 + "\n";
@@ -1153,10 +1201,10 @@ void parser::output_()
         if (a == "0") // address not found
         {
             string t = "virtual_t" + to_string(++tmp_count);
-            smt.insert_item(t, "temp", -1, n, false);
+            smt.insert_item(t, "str_temp", -1, n, false);
             a = smt.find_addr(t);
         }
-        v.mce("200 " + a);
+        v.mce("210 " + a);
 
         output__();
     }
@@ -1217,7 +1265,7 @@ string parser::separatetac(string exp)
         {
             str.erase(0, 1);
             operand1 += str.front();
-            if (str[1] >= 48 && str[1] <=56)
+            if (str[1] >= 48 && str[1] <= 56)
             {
                 str.erase(0, 1);
                 operand1 += str.front();
@@ -1420,8 +1468,8 @@ void parser::loop()
                     expect(TokenType::CLOSE_PARENTHESIS);
                     blks();
                     statements();
-                    update_tac("goto " + to_string(ret_loop) + "\n");
-                    v.mce("800 " + to_string(ret_loop));
+                    update_tac("goto " + to_string(ret_loop - 1) + "\n");
+                    v.mce("800 " + to_string(ret_loop - 1));
                     nl++;
                     find_replace("loopf", to_string(nl));
                     find_replace_machine_code("loopf", to_string(nl));

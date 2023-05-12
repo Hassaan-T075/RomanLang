@@ -46,6 +46,7 @@ public:
     int args();
     int args_();
     void statements();
+    void shararat();
     void blks();
     void fblke();
     void blke();
