@@ -21,6 +21,9 @@ public:
     int tmp_count = 0;
     int tmp_count_1 = 0;
     vm v;
+    string formal_param[10];
+    int param_count = 0;
+    int actual_count = 0; 
 
 public:
     void syntax_error();

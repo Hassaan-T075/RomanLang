@@ -386,6 +386,8 @@ void parser::params()
         ptabs("id");
         smt.insert_item(_lexer.peek(1).lexeme, _lexer.peek(3).lexeme, -1, "NULL", 0);
         tabs--;
+        formal_param[param_count] = _lexer.peek(1).lexeme;
+        param_count++;
         expect(TokenType::IDENTIFIER);
         vartype();
         sep();
@@ -423,6 +425,12 @@ int parser::args()
         entry = "param " + _lexer.peek(1).lexeme + "\n";
         update_tac(entry);
         nl++;
+
+        //set parameter value
+        string param_value = smt.find_value_by_name(_lexer.peek(1).lexeme);
+        smt.update_value(formal_param[actual_count], param_value);
+        actual_count++;
+
         expect(TokenType::IDENTIFIER);
         int s = args_() + 1;
         return s;
@@ -434,6 +442,11 @@ int parser::args()
         entry = "param " + _lexer.peek(1).lexeme + "\n";
         update_tac(entry);
         nl++;
+
+        //set parameter value
+        smt.update_value(formal_param[actual_count], _lexer.peek(1).lexeme);
+        actual_count++;
+
         expect(TokenType::NUMERIC_LITERAL);
         int s = args_() + 1;
         return s;
@@ -746,6 +759,9 @@ string parser::val()
                 // string var = newtmp();
                 update_tac("call " + id + " " + to_string(s) + ", " + var + "\n");
                 nl++;
+
+                string func_address = smt.find_addr(id);
+                v.mce("800 " + func_address);
                 if (_lexer.peek(1).tokenType == TokenType::CLOSE_PARENTHESIS)
                 {
                     ptabs(")");

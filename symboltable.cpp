@@ -104,7 +104,7 @@ public:
             if (line == -1) // store memory addr
             {
                 table[index][2] = to_string(addr_counter);
-                if (type == "adad" || type =="temp")
+                if (type == "adad" || type == "temp")
                 {
                     addr_counter += 4;
                 }
@@ -136,16 +136,37 @@ public:
         fil.close();
     }
 
-    string find_addr(string addr)
+    string find_addr(string name)
     {
         for (int i = 0; i < index; i++)
         {
             // const char* tt = table[index][0].c_str();
             // const char* adr = addr.c_str();
-            if(table[i][0] == addr)
+            if (table[i][0] == name)
                 return table[i][2];
         }
         return "0";
+    }
+
+    void update_value(string name, string val)
+    {
+        for (int i = 0; i < index; i++)
+        {
+            if (table[i][0] == name)
+                table[i][3] = val;
+        }
+
+        //print_table();
+    }
+
+    string find_value_by_name(string name)
+    {
+        for (int i = 0; i < index; i++)
+        {
+            if (table[i][0] == name)
+                return table[i][3];
+        }
+        return "no value";
     }
 
     ~symboltable()

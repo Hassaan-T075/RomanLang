@@ -26,6 +26,11 @@ int main(int argc, char *argv[])
 		parser p(argv[1]);
 		p.smt.print_table();
 		
+		// for (size_t i = 0; i < p.param_count; i++)
+		// {
+		// 	cout << p.formal_param[i] << " ";
+		// }
+		
 		// vm v;
 		// v.vmst = &p.smt;
 		// v.machine_code("TAC.txt");
