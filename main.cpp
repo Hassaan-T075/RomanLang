@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 		parser p(argv[1]);
 		p.smt.print_table();
 		p.shararat();
+		cout << p.count_lines();
 		
 		// for (size_t i = 0; i < p.param_count; i++)
 		// {

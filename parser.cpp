@@ -579,6 +579,23 @@ void parser::vartype()
     tabs--;
 }
 
+int parser::count_lines()
+{
+    string txt;
+    int lines = 0;
+
+    ifstream fil("mce.txt");
+
+    while (getline(fil, txt))
+    {
+        lines++;
+    }
+
+    fil.close();
+
+    return lines;
+}
+
 void parser::declare()
 {
     ptabs("declare");

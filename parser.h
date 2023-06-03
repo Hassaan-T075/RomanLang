@@ -85,5 +85,6 @@ public:
     string remove_spaces(string s);
     int op_translator(string op);
     void vm_conditionals(string exp, string cond);
+    int count_lines();
 };
 #endif
